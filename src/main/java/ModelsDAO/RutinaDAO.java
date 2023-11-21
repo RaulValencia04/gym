@@ -21,14 +21,13 @@ public class RutinaDAO {
             con = conexionDB.obtenerConexion();
 
             // Consulta SQL para insertar una nueva rutina
-            String consultaSQL = "INSERT INTO Rutina (nombre, dia, id_detalle_rutina, id_usuario) VALUES (?, ?, ?, ?)";
+            String consultaSQL = "INSERT INTO Rutina (nombre, dia, id_usuario) VALUES (?, ?, ?, ?)";
             statement = con.prepareStatement(consultaSQL);
 
             // Establecer los parámetros de la consulta con los valores de la rutina
             statement.setString(1, rutina.getNombre());
-            statement.setString(2, rutina.getDia());
-            statement.setInt(3, rutina.getIdDetalleRutina());
-            statement.setInt(4, rutina.getIdUsuario());
+            statement.setString(2, rutina.getDia());;
+            statement.setInt(3, rutina.getIdUsuario());
 
             // Ejecutar la consulta
             statement.executeUpdate();
