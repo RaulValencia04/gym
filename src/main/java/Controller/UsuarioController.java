@@ -44,13 +44,14 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response)
             if (action.equals("crear")) {
                 // Crear un nuevo usuario (operación Crear)
                 String nombre = request.getParameter("nombre_usuario");
+                 int roll = 1;
                 String apellido = request.getParameter("apellido_usuario");
                 String correo = request.getParameter("correo");
                 String telefono = request.getParameter("telefono");
                 String direccion = request.getParameter("direccion");
                 String contrasena = request.getParameter("contrasena");
                 
-                Usuario nuevoUsuario = new Usuario(nombre, apellido, correo, telefono, direccion, contrasena);
+                Usuario nuevoUsuario = new Usuario(roll,nombre,apellido, correo, telefono, direccion, contrasena);
                 UsuarioDAO usuarioDAO;
                 usuarioDAO = new UsuarioDAO();
                 usuarioDAO.agregarUsuario(nuevoUsuario);

@@ -73,6 +73,7 @@ public class UsuarioDAO {
             if (resultSet.next()) {
                 usuario = new Usuario(
                     resultSet.getInt("id_usuario"),
+                            resultSet.getInt("roll"),
                     resultSet.getString("nombre_usuario"),
                     resultSet.getString("apellido_usuario"),
                     resultSet.getString("correo"),
@@ -104,6 +105,7 @@ public class UsuarioDAO {
             if (resultSet.next()) {
                 usuario = new Usuario(
                     resultSet.getInt("id_usuario"),
+                    resultSet.getInt("roll"),
                     resultSet.getString("nombre_usuario"),
                     resultSet.getString("apellido_usuario"),
                     resultSet.getString("correo"),
@@ -122,18 +124,19 @@ public class UsuarioDAO {
     }
 
     public void agregarUsuario(Usuario usuario) {
-        String consultaSQL = "INSERT INTO usuarios (nombre_usuario, apellido_usuario, correo, telefono, direccion, passwords) VALUES (?, ?, ?, ?, ?, ?)";
+        String consultaSQL = "INSERT INTO usuarios (nombre_usuario,roll, apellido_usuario, correo, telefono, direccion, passwords) VALUES (?, ?, ?, ?, ?, ?)";
 
         try {
              Conexion conexion = new Conexion();
             Connection con = conexion.obtenerConexion();
             PreparedStatement statement = con.prepareStatement(consultaSQL);
             statement.setString(1, usuario.getNombreUsuario());
-            statement.setString(2, usuario.getApellidoUsuario());
-            statement.setString(3, usuario.getCorreo());
-            statement.setString(4, usuario.getTelefono());
-            statement.setString(5, usuario.getDireccion());
-            statement.setString(6, encriptarContraseña(usuario.getPassword()));
+            statement.setInt(2, usuario.getRoll());
+            statement.setString(3, usuario.getApellidoUsuario());
+            statement.setString(4, usuario.getCorreo());
+            statement.setString(5, usuario.getTelefono());
+            statement.setString(6, usuario.getDireccion());
+            statement.setString(7, encriptarContraseña(usuario.getPassword()));
 
             statement.executeUpdate();
             statement.close();
@@ -143,19 +146,20 @@ public class UsuarioDAO {
     }
 
     public void actualizarUsuario(Usuario usuario) {
-        String consultaSQL = "UPDATE usuarios SET nombre_usuario = ?, apellido_usuario = ?, correo = ?, telefono = ?, direccion = ?, passwords = ? WHERE id_usuario = ?";
+        String consultaSQL = "UPDATE usuarios SET nombre_usuario = ?,roll = ? , apellido_usuario = ?, correo = ?, telefono = ?, direccion = ?, passwords = ? WHERE id_usuario = ?";
 
         try {
              Conexion conexion = new Conexion();
             Connection con = conexion.obtenerConexion();
             PreparedStatement statement = con.prepareStatement(consultaSQL);
             statement.setString(1, usuario.getNombreUsuario());
-            statement.setString(2, usuario.getApellidoUsuario());
-            statement.setString(3, usuario.getCorreo());
-            statement.setString(4, usuario.getTelefono());
-            statement.setString(5, usuario.getDireccion());
-            statement.setString(6, encriptarContraseña(usuario.getPassword()));
-            statement.setInt(7, usuario.getIdUsuario());
+             statement.setInt(2, usuario.getRoll());
+            statement.setString(3, usuario.getApellidoUsuario());
+            statement.setString(4, usuario.getCorreo());
+            statement.setString(5, usuario.getTelefono());
+            statement.setString(6, usuario.getDireccion());
+            statement.setString(7, encriptarContraseña(usuario.getPassword()));
+            statement.setInt(8, usuario.getIdUsuario());
 
             statement.executeUpdate();
             statement.close();
