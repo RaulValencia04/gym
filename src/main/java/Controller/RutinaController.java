@@ -4,8 +4,14 @@
  */
 package Controller;
 
+import Models.Ejercicio;
+import ModelsDAO.EjercicioDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -57,6 +63,25 @@ public class RutinaController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+          EjercicioDAO ejercicioDAO = new EjercicioDAO();
+        List<Ejercicio> ejercicios = null;
+        try {
+            ejercicios = ejercicioDAO.obtenerTodosLosEjercicios();
+            System.out.println("Número de ejercicios: " + ejercicios);//si me imprime la cantidad de ejercicios
+
+        } catch (SQLException ex) {
+            Logger.getLogger(DetalleEjercicioController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        // Colocar la lista de ejercicios en el alcance de la solicitud
+        request.setAttribute("listaEjercicios", ejercicios);
+
+
+        // Redirigir a la vista JSP
+
+        
+        
         request.getRequestDispatcher("./Views/Rutina/CreateRutina.jsp").forward(request, response);
         
         

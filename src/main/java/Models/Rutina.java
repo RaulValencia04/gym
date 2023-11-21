@@ -12,14 +12,13 @@ public class Rutina {
        private int idRutina;
     private String nombre;
     private String dia;
-    private int idDetalleRutina;
+  
     private int idUsuario;
 
     // Constructor
-    public Rutina(String nombre, String dia, int idDetalleRutina, int idUsuario) {
+    public Rutina(String nombre, String dia, int idUsuario) {
         this.nombre = nombre;
         this.dia = dia;
-        this.idDetalleRutina = idDetalleRutina;
         this.idUsuario = idUsuario;
     }
 
@@ -48,13 +47,6 @@ public class Rutina {
         this.dia = dia;
     }
 
-    public int getIdDetalleRutina() {
-        return idDetalleRutina;
-    }
-
-    public void setIdDetalleRutina(int idDetalleRutina) {
-        this.idDetalleRutina = idDetalleRutina;
-    }
 
     public int getIdUsuario() {
         return idUsuario;

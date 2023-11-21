@@ -10,6 +10,7 @@ ModelsDAO/UsuarioDAO.class
 Models/Rutina.class
 Models/DatosCuerpo.class
 Controller/LoginController.class
+Controller/DetalleEjercicioController.class
 Controller/RutinaController.class
 ModelsDAO/CategoriaDAO.class
 com/mycompany/gym/JakartaRestConfiguration.class

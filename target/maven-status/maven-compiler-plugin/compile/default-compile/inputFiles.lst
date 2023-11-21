@@ -10,6 +10,7 @@
 /Users/raulvalencia/NetBeansProjects/gym/src/main/java/Models/Ejercicio.java
 /Users/raulvalencia/NetBeansProjects/gym/src/main/java/Models/Usuario.java
 /Users/raulvalencia/NetBeansProjects/gym/src/main/java/Models/DatosCuerpo.java
+/Users/raulvalencia/NetBeansProjects/gym/src/main/java/Controller/DetalleEjercicioController.java
 /Users/raulvalencia/NetBeansProjects/gym/src/main/java/Controller/DatosController.java
 /Users/raulvalencia/NetBeansProjects/gym/src/main/java/Controller/RutinaController.java
 /Users/raulvalencia/NetBeansProjects/gym/src/main/java/ModelsDAO/DetalleRutinaDAO.java
