@@ -9,10 +9,12 @@ import Models.Categoria;
 
 public class CategoriaDAO {
 
-    public void insertarCategoria(Categoria categoria) throws SQLException {
+   public static boolean insertarCategoria(Categoria categoria) {
         Connection con = null;
         PreparedStatement statement = null;
+        boolean exito = true;
 
+          System.out.println("modelooooooooooo siii lleguaaaa");
         try {
             Conexion conexionDB = new Conexion();
             con = conexionDB.obtenerConexion();
@@ -27,20 +29,28 @@ public class CategoriaDAO {
 
             // Ejecutar la consulta
             statement.executeUpdate();
-        } finally {
-            // Cerrar recursos
+
+            // Confirmar la transacción si todo ha ido bien
+            con.commit();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            exito = false;
+
+            // Revertir la transacción en caso de excepción
             try {
-                if (statement != null) {
-                    statement.close();
-                }
                 if (con != null) {
-                    con.close();
+                    con.rollback();
                 }
-            } catch (SQLException e) {
-                e.printStackTrace();
+            } catch (SQLException rollbackException) {
+                rollbackException.printStackTrace();
             }
         }
+
+        // Devolver true si no hubo problemas
+        return exito;
     }
 
+    
+    
 }
 

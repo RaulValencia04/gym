@@ -22,6 +22,42 @@
 
 <div class="container">
     <h1>Hello World!</h1>
+    
+    
+    
+        <%-- Mostrar mensaje de éxito si está presente en la sesión --%>
+    <% String successMessage = (String) session.getAttribute("successMessage"); %>
+    <% if (successMessage != null) { %>
+        <script>
+            Swal.fire({
+                title: 'Éxito',
+                text: '<%= successMessage %>',
+                icon: 'success',
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000
+            });
+        </script>
+        <% session.removeAttribute("successMessage"); %>
+    <% } %>
+
+    <%-- Mostrar mensaje de error si está presente en la sesión --%>
+    <% String errorMessage = (String) session.getAttribute("errorMessage"); %>
+    <% if (errorMessage != null) { %>
+        <script>
+            Swal.fire({
+                title: 'Error',
+                text: '<%= errorMessage %>',
+                icon: 'error',
+                toast: true,
+                position: 'center',
+                showConfirmButton: false,
+                timer: 3000
+            });
+        </script>
+        <% session.removeAttribute("errorMessage"); %>
+    <% } %>
 
     <%!
         // Método para verificar la sesión

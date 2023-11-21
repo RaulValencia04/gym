@@ -60,17 +60,28 @@
                 <li class="nav-item">
                     <a class="nav-link" href="LoginController"id="login-link2">Login</a>
                 </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="MostrarFormCategoria" id="datos" style="display: block;"> Crear Categoria</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="MostrarFormEjercicio" id="newejercicios" style="display: block;">Crear ejer Diego</a>
+                </li>
                 
                 <li class="nav-item">
                     <a class="nav-link" href="DatosController" id="datos" style="display: none;"> mi cuerpo</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="DatosController" id="newejercicios" style="display: none;">Crear ejercicios</a>
-                </li>
+
+                
+                
+              
             </ul>
         </div>
     </div>
 </nav>
+
+
+    
+
 
 
 <!-- JS -->
