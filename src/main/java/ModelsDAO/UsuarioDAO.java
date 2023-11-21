@@ -124,7 +124,7 @@ public class UsuarioDAO {
     }
 
     public void agregarUsuario(Usuario usuario) {
-        String consultaSQL = "INSERT INTO usuarios (nombre_usuario,roll, apellido_usuario, correo, telefono, direccion, passwords) VALUES (?, ?, ?, ?, ?, ?)";
+        String consultaSQL = "INSERT INTO usuarios (nombre_usuario,roll, apellido_usuario, correo, telefono, direccion, passwords) VALUES (?, ?, ?, ?, ?, ?,?)";
 
         try {
              Conexion conexion = new Conexion();
