@@ -59,10 +59,9 @@ public class RutinaDAO {
                 int idRutina = resultSet.getInt("id_rutina");
                 String nombre = resultSet.getString("nombre");
                 String dia = resultSet.getString("dia");
-                int idDetalleRutina = resultSet.getInt("id_detalle_rutina");
                 int idUsuario = resultSet.getInt("id_usuario");
 
-                Rutina rutina = new Rutina(nombre, dia, idDetalleRutina, idUsuario);
+                Rutina rutina = new Rutina(nombre, dia, idUsuario);
                 rutina.setIdRutina(idRutina);
 
                 rutinas.add(rutina);
@@ -97,7 +96,7 @@ public class RutinaDAO {
                 int idDetalleRutina = resultSet.getInt("id_detalle_rutina");
                 int idUsuario = resultSet.getInt("id_usuario");
 
-                Rutina rutina = new Rutina(nombre, dia, idDetalleRutina, idUsuario);
+                Rutina rutina = new Rutina(nombre, dia, idUsuario);
                 rutina.setIdRutina(idRutina);
 
                 return rutina;
@@ -119,15 +118,14 @@ public class RutinaDAO {
             con = conexionDB.obtenerConexion();
 
             // Consulta SQL para actualizar una rutina
-            String consultaSQL = "UPDATE Rutina SET nombre = ?, dia = ?, id_detalle_rutina = ?, id_usuario = ? WHERE id_rutina = ?";
+            String consultaSQL = "UPDATE Rutina SET nombre = ?, dia = ?, id_usuario = ? WHERE id_rutina = ?";
             statement = con.prepareStatement(consultaSQL);
 
             // Establecer los parámetros de la consulta con los nuevos valores de la rutina
             statement.setString(1, rutina.getNombre());
             statement.setString(2, rutina.getDia());
-            statement.setInt(3, rutina.getIdDetalleRutina());
-            statement.setInt(4, rutina.getIdUsuario());
-            statement.setInt(5, rutina.getIdRutina());
+            statement.setInt(3, rutina.getIdUsuario());
+            statement.setInt(4, rutina.getIdRutina());
 
             // Ejecutar la consulta
             statement.executeUpdate();

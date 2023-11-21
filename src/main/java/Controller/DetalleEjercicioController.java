@@ -22,8 +22,8 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author raulvalencia
  */
-@WebServlet(name = "RutinaController", urlPatterns = {"/RutinaController"})
-public class RutinaController extends HttpServlet {
+@WebServlet(name = "DetalleEjercicioController", urlPatterns = {"/DetalleEjercicioController"})
+public class DetalleEjercicioController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -42,10 +42,10 @@ public class RutinaController extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet RutinaController</title>");            
+            out.println("<title>Servlet DetalleEjercicioController</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet RutinaController at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet DetalleEjercicioController at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -60,34 +60,24 @@ public class RutinaController extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    @Override
+      @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-          EjercicioDAO ejercicioDAO = new EjercicioDAO();
-        List<Ejercicio> ejercicios = null;
-        try {
-            ejercicios = ejercicioDAO.obtenerTodosLosEjercicios();
-            System.out.println("Número de ejercicios: " + ejercicios);//si me imprime la cantidad de ejercicios
-
-        } catch (SQLException ex) {
-            Logger.getLogger(DetalleEjercicioController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        // Colocar la lista de ejercicios en el alcance de la solicitud
-        request.setAttribute("listaEjercicios", ejercicios);
-
-
-        // Redirigir a la vista JSP
-
-        
-        
-        request.getRequestDispatcher("./Views/Rutina/CreateRutina.jsp").forward(request, response);
-        
-        
-        
+        // Obtener la lista de ejercicios desde la base de datos
+//        EjercicioDAO ejercicioDAO = new EjercicioDAO();
+//        List<Ejercicio> ejercicios = null;
+//        try {
+//            ejercicios = ejercicioDAO.obtenerTodosLosEjercicios();
+//        } catch (SQLException ex) {
+//            Logger.getLogger(DetalleEjercicioController.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//
+//        // Colocar la lista de ejercicios en el alcance de la solicitud
+//        request.setAttribute("ejercicios", ejercicios);
+//
+//        // Redirigir a la vista JSP
+//        request.getRequestDispatcher("CreateRutina.jsp").forward(request, response);
     }
-
     /**
      * Handles the HTTP <code>POST</code> method.
      *
@@ -99,7 +89,7 @@ public class RutinaController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher("./Views/Rutina/CreateRutina.jsp").forward(request, response);
+        processRequest(request, response);
     }
 
     /**
