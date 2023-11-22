@@ -193,7 +193,7 @@
             }
         </style>
 
-        <div class="container-fluid fondo-con-imagen" style="background-image: url('img/fondo1.jpg');">
+        <div class="container-fluid fondo-con-imagen" style="background-image: url('img/fondo1.jpg'); padding-bottom: 50px">
             <h1 class="" style="padding-top: 150px; background-color: rgba(0, 0, 0, 0.3); color: #f5f5f5; font-size: 50px; text-align: center;">Mejores Ejercicios</h1>
             <div class="products mb-5">
                 <div class="row justify-content: space-between">
