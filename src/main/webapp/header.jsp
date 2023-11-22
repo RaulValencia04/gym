@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="Models.Usuario"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -11,13 +12,6 @@
 
 <body>
     <div class="container-fluid p-0 nav-bar">
-
-             
-   
-    
-    
-
-
         <nav class="navbar navbar-expand-lg bg-none navbar-dark py-3">
             <a href="" class="navbar-brand">
                 <h1 class="m-0 display-4 font-weight-bold text-uppercase text-white">GymRats</h1>
@@ -28,39 +22,50 @@
             <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                 <div class="navbar-nav ml-auto p-4 bg-secondary">
                     <a href="#" class="nav-item nav-link active">Home</a>
-                    
+
                     <c:choose>
                         <c:when test="${empty sessionScope.usuario}">
-                            <a class="nav-link" aria-current="page" href="LoginController" id="login-link2"><i class="bi bi-person-check"></i> Iniciar SesiÃ³n</a>
+                            <a class="nav-link" aria-current="page" href="LoginController" id="login-link2"><i class="bi bi-person-check"></i> Iniciar Sesión</a>
                             <a class="nav-link" href="UsuarioController" id="login-link"><i class="bi bi-person-add"></i> Registro</a>
                         </c:when>
                         <c:otherwise>
-                            <a class="nav-link" aria-current="page" href="/categorias">Ejercicios</a>
-                            <a class="nav-link" aria-current="page" href="DatosController" id="datos">Datos Cuerpo</a>
-                             <a class="nav-link "  aria-current="page" href="VerCategoria">Aprender GYM</a>
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Agregar
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <li class="dropdown-item">
-                                        <a href="/MostrarFormCategoria">Agregar CategorÃ­as</a>
+                            <c:choose>
+                                <c:when test="${sessionScope.usuario.roll eq 1}">
+                                    <!-- Rol 0 (Cliente) -->
+                                    <a class="nav-link" aria-current="page" href="/categorias">Ejercicios</a>
+                                    <a class="nav-link" aria-current="page" href="DatosController" id="datos">Datos Cuerpo</a>
+                                    <a class="nav-link" aria-current="page" href="VerCategoria">Aprender GYM</a>
+                                    <a class="btn btn-outline nav-item nav-link" href="LogoutController" id="login-link3"><i class="bi bi-person-add"></i> Salir</a>
+                                </c:when>
+                                <c:when test="${sessionScope.usuario.roll eq 0}">
+                                    <!-- Rol 1 (Administrador) -->
+                                    <a class="nav-link" aria-current="page" href="/categorias">Ejercicios</a>
+                                    <a class="nav-link" aria-current="page" href="DatosController" id="datos">Datos Cuerpo</a>
+                                    <a class="nav-link" aria-current="page" href="VerCategoria">Aprender GYM</a>
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            Agregar
+                                        </a>
+                                        <ul class="dropdown-menu">
+                                            <li class="dropdown-item">
+                                                <a href="/MostrarFormCategoria">Agregar Categorías</a>
+                                            </li>
+                                            <li class="dropdown-item">
+                                                <a href="/MostrarFormEjercicio">Agregar Ejercicios</a>
+                                            </li>
+                                        </ul>
                                     </li>
-                                    <li class="dropdown-item">
-                                        <a href="/MostrarFormEjercicio">Agregar Ejercicios</a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <form class="d-flex" role="search">
-                                <a class="btn btn-outline nav-item nav-link" href="LogoutController" id="login-link3"><i class="bi bi-person-add"></i> Salir</a>
-                            </form>
+                                    <form class="d-flex" role="search">
+                                        <a class="btn btn-outline nav-item nav-link" href="LogoutController" id="login-link3"><i class="bi bi-person-add"></i> Salir</a>
+                                    </form>
+                                </c:when>
+                            </c:choose>
                         </c:otherwise>
                     </c:choose>
                 </div>
             </div>
         </nav>
     </div>
-
 
     <script>
         var loginLink = document.getElementById("login-link");
@@ -80,10 +85,10 @@
         var ejer = document.getElementById("newejercicios");
         var datos = document.getElementById("datos");
         
-        // datos.style.display = "block";  // Este bloque se encuentra comentado ya que no se estÃ¡ utilizando.
+        // datos.style.display = "block";  // Este bloque se encuentra comentado ya que no se está utilizando.
 
         if (idRol === 1) {
-            // newejercicios.style.display = "block";  // Este bloque se encuentra comentado ya que no se estÃ¡ utilizando.
+            // newejercicios.style.display = "block";  // Este bloque se encuentra comentado ya que no se está utilizando.
         }
     </script>
 </body>
