@@ -49,7 +49,7 @@
                 <p>
                     Puedes crear tus propias categorias de ejercicios para tener mejor distribuidos los ejerccios por musculos..
                 </p>
-                <a href="/login" class="btn btn-lg btn-outline-light mt-3 mt-md-5 py-md-3 px-md-5">Comienza</a>
+                <a href="/gym/RutinaController" class="btn btn-lg btn-outline-light mt-3 mt-md-5 py-md-3 px-md-5">Comienza</a>
             </div>
         </div>
         <div class="col-md-6 p-0">

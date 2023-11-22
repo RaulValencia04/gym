@@ -39,6 +39,12 @@
               <li class="dropdown-item">
                 <a href="/MostrarFormEjercicio">Agregar Ejercicios</a>
               </li>
+              <li>
+                                
+
+              </li>
+              
+              
             </ul>
           </li>
 
@@ -49,6 +55,7 @@
                 <form class="d-flex" role="search">
                     <a class="btn btn-outline nav-item nav-link" href="LoginController" id="login-link2"><i class="bi bi-person-check"></i> Iniciar Sesión</a>
                     <a class="btn btn-outline nav-item nav-link" href="UsuarioController" id="login-link"><i class="bi bi-person-add"></i> Registro</a>
+                    <a class="nav-link "  aria-current="page" href="RutinaController" >Datosdd Cuerpo</a>
                 </form>
            
           </div>

@@ -1,58 +1,94 @@
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<jsp:include page="../../header.jsp" />
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Datos del Cuerpo</title>
-    <!-- Agrega enlaces a tus estilos CSS si los tienes -->
-    <link rel="stylesheet" type="text/css" href="tu_estilo.css">
-    <!-- Agrega enlaces a las bibliotecas de Bootstrap si las estás utilizando -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rutina</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+          rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+          crossorigin="anonymous">
 </head>
 <body>
-    <div class="container">
-        <h1>Datos del Cuerpo</h1>
-        <form action="DatosController" method="post">
-            <!-- Campo Sexo -->
-            <div class="form-group">
-                <label for="sexo">Sexo:</label>
-                <select class="form-control" id="sexo" name="sexo" required>
-                    <option value="M">Masculino</option>
-                    <option value="F">Femenino</option>
-                </select>
+
+<div class="container mt-5">
+    <div class="row">
+        <c:forEach var="dia" items="${diasSemana}">
+            <div class="col-md-3 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title"><c:out value="${dia}" /></h5>
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                data-bs-target="#exampleModal" data-bs-whatever="@mdo"
+                                onclick="abrirModal('${dia}')">Añadir ejercicio
+                        </button>
+                    </div>
+                </div>
             </div>
-
-            <!-- Campo Edad -->
-            <div class="form-group">
-                <label for="edad">Edad:</label>
-                <input type="number" class="form-control" id="edad" name="edad" required>
-            </div>
-
-            <!-- Campo Peso -->
-            <div class="form-group">
-                <label for="peso">Peso (kg):</label>
-                <input type="number" step="0.01" class="form-control" id="peso" name="peso" required>
-            </div>
-
-            <!-- Campo Altura -->
-            <div class="form-group">
-                <label for="altura">Altura (m):</label>
-                <input type="number" step="0.01" class="form-control" id="altura" name="altura" required>
-            </div>
-
-            <!-- Agrega más campos según sea necesario -->
-
-            <!-- Botón de Enviar -->
-            <button type="submit" class="btn btn-primary">Guardar Datos</button>
-        </form>
+        </c:forEach>
     </div>
 
-    <!-- Agrega enlaces a tus scripts JS si los tienes -->
-    <script src="tu_script.js"></script>
-    <!-- Agrega enlaces a las bibliotecas de Bootstrap JS si las estás utilizando -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <!-- Modal para agregar ejercicios -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Ejercicios</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label for="recipient-name" class="col-form-label">Día:</label>
+                            <input type="text" class="form-control" id="recipient-name" readonly>
+                        </div>
+                        <!-- Agrega tus campos de ejercicio aquí -->
+                        <div class="mb-3">
+                            <label for="ejercicio" class="col-form-label">Ejercicio:</label>
+                            <input type="text" class="form-control" id="ejercicio">
+                        </div>
+                        <div class="mb-3">
+                            <label for="repeticiones" class="col-form-label">Cantidad de repeticiones:</label>
+                            <input type="number" class="form-control" id="repeticiones">
+                        </div>
+                        <button type="button" class="btn btn-primary" onclick="guardarEjercicio()">Guardar</button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"
+        integrity="sha256-oP6HI/tT1h1eeN/U9gIxpCUFMw+uVoF6A5eTqrs9iE=" crossorigin="anonymous"></script>
+
+<script>
+    function abrirModal(dia) {
+        // Actualiza el campo de entrada con el día seleccionado
+        var modal = document.getElementById('exampleModal');
+        var inputDia = modal.querySelector('#recipient-name');
+        inputDia.value = dia;
+
+        // Abre el modal
+        var myModal = new bootstrap.Modal(modal);
+        myModal.show();
+    }
+
+    function guardarEjercicio() {
+        // Agrega tu lógica para guardar el ejercicio aquí
+        alert('Ejercicio guardado');
+        // Cierra el modal después de guardar
+        $('#exampleModal').modal('hide');
+    }
+</script>
+
 </body>
 </html>

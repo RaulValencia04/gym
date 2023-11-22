@@ -22,6 +22,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -31,7 +32,7 @@ import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author raulvalencia
+ * @author raulvalencia . funciona
  */
 @WebServlet(name = "RutinaController", urlPatterns = {"/RutinaController"})
 public class RutinaController extends HttpServlet {
@@ -53,7 +54,7 @@ public class RutinaController extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet RutinaController</title>");            
+            out.println("<title>Servlet RutinaController</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet RutinaController at " + request.getContextPath() + "</h1>");
@@ -71,30 +72,73 @@ public class RutinaController extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
- protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+            String action = request.getParameter("action");
+
+            // Si action es nulo, establecer un valor predeterminado
+            if (action == null) {
+                action = "listCategories";
+            }
+
+            switch (action) {
+                case "listCategories":
+                    listCategories(request, response);
+                    break;
+                case "listExercises":
+                    listExercises(request, response);
+                    break;
+                default:
+                    // Para cualquier otro valor de acción, se redirige a la lista de categorías por defecto
+                    listCategories(request, response);
+                    break;
+            }
+        }
+            
+
+
+    private void listCategories(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
             CategoriaDAO categoriaDAO = new CategoriaDAO();
             List<Categoria> categorias = categoriaDAO.consultaGeneral();
-
-            // Obtén la categoría seleccionada
-            int idCategoriaSeleccionada = Integer.parseInt(request.getParameter("categoria"));
-
             EjercicioDAO ejercicioDAO = new EjercicioDAO();
-            List<Ejercicio> ejercicios = ejercicioDAO.obtenerEjerciciosPorCategoria(idCategoriaSeleccionada);
-
-            // Coloca las listas en el alcance de la solicitud
+            List<Ejercicio> ejercicios = ejercicioDAO.obtenerTodosLosEjercicios();
             request.setAttribute("listacategoria", categorias);
-            request.setAttribute("listaEjercicios", ejercicios);
-            request.setAttribute("selectedCategoryId", idCategoriaSeleccionada);
-
-            // Redirige a la vista JSP
+               request.setAttribute("listaejercicios", ejercicios);
             request.getRequestDispatcher("./Views/Rutina/CreateRutina.jsp").forward(request, response);
         } catch (SQLException ex) {
             ex.printStackTrace();
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error al obtener la lista de ejercicios");
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error al obtener la lista de categorías");
         }
     }
+
+  private void listExercises(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
+    try {
+        String categoriaParam = request.getParameter("categoria");
+        int idCategoriaSeleccionada = (categoriaParam != null && !categoriaParam.isEmpty()) ? Integer.parseInt(categoriaParam) : 0;
+
+        EjercicioDAO ejercicioDAO = new EjercicioDAO();
+        List<Ejercicio> ejercicios = ejercicioDAO.obtenerTodosLosEjercicios();
+
+        // Coloca las listas en el alcance de la solicitud
+        request.setAttribute("listaEjercicios", ejercicios);
+        request.setAttribute("selectedCategoryId", idCategoriaSeleccionada);
+
+        // Redirige a la vista JSP
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/Views/Rutina/CreateRutina.jsp");
+        dispatcher.forward(request, response);
+    } catch (SQLException ex) {
+        // Registra la excepción en lugar de imprimir en la consola
+        ex.printStackTrace(); // O utiliza un sistema de registro
+
+        // Redirige a una página de error personalizada
+        response.sendRedirect(request.getContextPath() + "/error.jsp");
+    }
+}
+
 
     /**
      * Handles the HTTP <code>POST</code> method.
@@ -104,53 +148,52 @@ public class RutinaController extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
- @Override
-protected void doPost(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
-    try {
-        // Recopilar datos del formulario
-        String nombreRutina = request.getParameter("rutina");
-        String dia = request.getParameter("Dia");
-        String[] ejercicios = request.getParameterValues("ejercicios");
-        String[] repeticiones = request.getParameterValues("repeticiones");
-        
-        
-        HttpSession session = request.getSession();
-        String correo = (String) session.getAttribute("correo");
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            // Recopilar datos del formulario
+            String nombreRutina = request.getParameter("nombre");
+            String dia = request.getParameter("Dia");
+            String[] ejercicios = request.getParameterValues("ejercicios");
+            String[] repeticiones = request.getParameterValues("repeticiones");
 
-        // Obtener el ID de usuario desde la base de datos usando el correo electrónico
-        int idUsuario = obtenerIdUsuarioPorCorreo(correo);
+            HttpSession session = request.getSession();
+            String correo = (String) session.getAttribute("correo");
 
-        // Crear objeto Rutina
-        Rutina rutina = new Rutina(nombreRutina, dia, idUsuario); // Asegúrate de tener el idUsuario disponible
+            // Obtener el ID de usuario desde la base de datos usando el correo electrónico
+            int idUsuario = obtenerIdUsuarioPorCorreo(correo);
 
-        // Guardar la rutina en la base de datos
-        RutinaDAO rutinaDAO = new RutinaDAO();
-        rutinaDAO.insertarRutina(rutina);
+            // Crear objeto Rutina
+            Rutina rutina = new Rutina(nombreRutina, dia, idUsuario); // Asegúrate de tener el idUsuario disponible
 
-        // Obtener el ID de la rutina recién insertada
-        int idRutina = rutinaDAO.obtenerIdRutina(); // Puedes agregar este método a RutinaDAO
+            // Guardar la rutina en la base de datos
+            RutinaDAO rutinaDAO = new RutinaDAO();
+            rutinaDAO.insertarRutina(rutina);
 
-        // Guardar detalles de la rutina
-        DetalleRutinaDAO detalleRutinaDAO = new DetalleRutinaDAO();
-        for (int i = 0; i < ejercicios.length; i++) {
-            int idEjercicio = Integer.parseInt(ejercicios[i]);
-            int cantidadReps = Integer.parseInt(repeticiones[i]);
+            // Obtener el ID de la rutina recién insertada
+            int idRutina = rutinaDAO.obtenerIdRutina(); // Puedes agregar este método a RutinaDAO
 
-            DetalleRutina detalleRutina = new DetalleRutina(idEjercicio, idRutina, cantidadReps);
-            detalleRutinaDAO.insertarDetalleRutina(detalleRutina);
+            // Guardar detalles de la rutina
+            DetalleRutinaDAO detalleRutinaDAO = new DetalleRutinaDAO();
+            for (int i = 0; i < ejercicios.length; i++) {
+                int idEjercicio = Integer.parseInt(ejercicios[i]);
+                int cantidadReps = Integer.parseInt(repeticiones[i]);
+
+                DetalleRutina detalleRutina = new DetalleRutina(idEjercicio, idRutina, cantidadReps);
+                detalleRutinaDAO.insertarDetalleRutina(detalleRutina);
+            }
+
+            // Redirigir a alguna página de éxito
+            response.sendRedirect("/gym/RutinaController");
+        } catch (SQLException ex) {
+            // Manejar errores
+            ex.printStackTrace();
+            response.sendRedirect("error.jsp");
         }
-
-        // Redirigir a alguna página de éxito
-        response.sendRedirect("/RutinaController");
-    } catch (SQLException ex) {
-        // Manejar errores
-        ex.printStackTrace();
-        response.sendRedirect("error.jsp");
     }
-}
 
- private int obtenerIdUsuarioPorCorreo(String correo) throws SQLException {
+    private int obtenerIdUsuarioPorCorreo(String correo) throws SQLException {
         int idUsuario = -1;
         Connection con = null;
         PreparedStatement statement = null;
@@ -167,7 +210,7 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
             statement.setString(1, correo);
 
             // Ejecuta la consulta
-            try (ResultSet resultSet = statement.executeQuery()) {
+            try ( ResultSet resultSet = statement.executeQuery()) {
                 // Verifica si se encontró un resultado
                 if (resultSet.next()) {
                     idUsuario = resultSet.getInt("id_usuario");
@@ -187,10 +230,8 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
             }
         }
 
-        return idUsuario*1;
+        return idUsuario * 1;
     }
-
-
 
     /**
      * Returns a short description of the servlet.
