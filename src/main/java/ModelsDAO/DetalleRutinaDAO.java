@@ -69,6 +69,26 @@ public class DetalleRutinaDAO {
 
         return detallesRutina;
     }
+        public void eliminarRutina(int idRutina) throws SQLException {
+        Connection con = null;
+        PreparedStatement statement = null;
+
+        try {
+            Conexion conexionDB = new Conexion();
+            con = conexionDB.obtenerConexion();
+
+            // Consulta SQL para eliminar una rutina por ID
+            String consultaSQL = "DELETE FROM DetalleRutina WHERE id_rutina = ?";
+            statement = con.prepareStatement(consultaSQL);
+            statement.setInt(1, idRutina);
+
+            // Ejecutar la consulta
+            statement.executeUpdate();
+        } finally {
+            // Cerrar recursos
+            cerrarRecursos(con, statement, null);
+        }
+    }
 
     // Otros métodos existentes...
 

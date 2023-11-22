@@ -65,9 +65,7 @@
                                 </svg>
                             </button>
 
-                            <button type="button" class="btn btn-success  m-2 mb-3 " data-bs-toggle="modal"
-                                    data-bs-target="#exampleModal" data-bs-whatever="@mdo"
-                                    onclick="abrirModal('<%= dia%>')"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar-week-fill" viewBox="0 0 16 16">
+                            <button type="button"  id="btnFiltrar" class="btn btn-success btnFiltrar m-2 mb-3 " data-dia="<%= dia %>" ><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar-week-fill" viewBox="0 0 16 16">
                                 <path d="M4 .5a.5.5 0 0 0-1 0V1H2a2 2 0 0 0-2 2v1h16V3a2 2 0 0 0-2-2h-1V.5a.5.5 0 0 0-1 0V1H4zM16 14V5H0v9a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2M9.5 7h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5m3 0h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5M2 10.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3.5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5"/>
                                 </svg>
                             </button>
@@ -149,7 +147,69 @@
                         </div>
                     </div>
                 </div>
+                <script>
+                  document.addEventListener('click', function (event) {
+    // Verifica si el clic proviene de un botón con la clase 'btnFiltrar'
+    if (event.target.classList.contains('btnFiltrar')) {
+        // Obtener el día del botón en el que se hizo clic
+        var selectedDay = event.target.getAttribute('data-dia');
+
+        // Ocultar todas las filas de la tabla
+        var tableRows = document.querySelectorAll('tbody tr');
+        tableRows.forEach(function (row) {
+            row.style.display = 'none';
+        });
+
+        // Mostrar solo las filas correspondientes al día seleccionado
+        var selectedDayRows = document.querySelectorAll('tbody tr td.table-active');
+        selectedDayRows.forEach(function (cell) {
+            if (cell.innerText === selectedDay) {
+                cell.parentElement.style.display = '';
+            }
+        });
+    }
+});
+
+                </script>
+
+
                 <% }%>
+            </div>
+            <div class="col-md-12 mt-3">
+                <h2>Rutinas</h2>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Dia</th>
+                            <th>Ejercicio</th>
+                            <th>Repeticiones</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaRutinas<%= posicion%>">
+                        <c:forEach var="rut" items="${listarutina}">
+                            <tr>
+                                <td>${rut.nombre}</td>
+                                <td class="table-active">${rut.dia}</td>
+                                <td class="table-active">${rut.nombreEjercicio}</td>
+                                <td class="table-active">${rut.repeticiones}</td>
+                                <td>
+                                    <!-- Botón para editar -->
+                                    <a href="EditarRutinaServlet?id=${rut.idRutina}" class="btn btn-primary btn-sm">Editar</a>
+
+                                    <!-- Botón para eliminar (usando un formulario para enviar una solicitud POST) -->
+                                    <form action="EliminarRutinaServlet" method="post" style="display:inline;">
+                                        <input type="hidden" name="idRutina" value="${rut.idRutina}">
+                                        <button type="submit" class="btn btn-danger btn-sm"
+                                                onclick="return confirm('¿Estás seguro de que deseas eliminar esta rutina?')">Eliminar
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        </c:forEach>
+                    </tbody>
+                </table>
             </div>
 
             <!-- Botón para guardar la rutina -->
@@ -166,21 +226,31 @@
         integrity="sha256-oP6HI/tT1h1eeN/U9gIxpCUFMw+uVoF6A5eTqrs9iE=" crossorigin="anonymous"></script>
 
         <script>
-                                        function abrirModal(dia) {
-                                            // Actualiza el campo de entrada con el día y la rutina seleccionados
-                                            var modal = document.getElementById('exampleModal');
-                                            var inputDia = modal.querySelector('#recipient-name');
-                                            var inputRutina = modal.querySelector('#recipient-name2');
+                                                    function abrirModal(dia) {
+                                                        // Actualiza el campo de entrada con el día y la rutina seleccionados
+                                                        var modal = document.getElementById('exampleModal');
+                                                        var inputDia = modal.querySelector('#recipient-name');
+                                                        var inputRutina = modal.querySelector('#recipient-name2');
 
-                                            inputDia.value = dia;
+                                                        inputDia.value = dia;
 
-                                            // Abre el modal
-                                            var myModal = new bootstrap.Modal(modal);
-                                            myModal.show();
-                                        }
+                                                        // Abre el modal
+                                                        var myModal = new bootstrap.Modal(modal);
+                                                        myModal.show();
+                                                    }
 
 
+
+        </script>
+        <script>
+            // Función para verificar si un elemento contiene un texto
+            jQuery.expr[':'].contains = function (a, i, m) {
+                return jQuery(a).text().toUpperCase().indexOf(m[3].toUpperCase()) >= 0;
+            };
         </script>
 
     </body>
 </html>
+
+
+<!--codigo funciona----->

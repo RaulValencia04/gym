@@ -8,6 +8,7 @@ Models/Usuario.class
 Models/Ejercicio.class
 ModelsDAO/UsuarioDAO.class
 Models/Rutina.class
+Controller/EliminarRutinaServlet.class
 Models/DatosCuerpo.class
 Controller/LoginController.class
 Controller/DetalleEjercicioController.class

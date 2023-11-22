@@ -75,70 +75,116 @@ public class RutinaController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-            String action = request.getParameter("action");
+        String action = request.getParameter("action");
 
-            // Si action es nulo, establecer un valor predeterminado
-            if (action == null) {
-                action = "listCategories";
-            }
-
-            switch (action) {
-                case "listCategories":
-                    listCategories(request, response);
-                    break;
-                case "listExercises":
-                    listExercises(request, response);
-                    break;
-                default:
-                    // Para cualquier otro valor de acción, se redirige a la lista de categorías por defecto
-                    listCategories(request, response);
-                    break;
-            }
+        // Si action es nulo, establecer un valor predeterminado
+        if (action == null) {
+            action = "listCategories";
         }
-            
 
-
-    private void listCategories(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        try {
-            CategoriaDAO categoriaDAO = new CategoriaDAO();
-            List<Categoria> categorias = categoriaDAO.consultaGeneral();
-            EjercicioDAO ejercicioDAO = new EjercicioDAO();
-            List<Ejercicio> ejercicios = ejercicioDAO.obtenerTodosLosEjercicios();
-            request.setAttribute("listacategoria", categorias);
-               request.setAttribute("listaejercicios", ejercicios);
-            request.getRequestDispatcher("./Views/Rutina/CreateRutina.jsp").forward(request, response);
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error al obtener la lista de categorías");
+        switch (action) {
+            case "listCategories":
+                listCategories(request, response);
+                break;
+            case "listExercises":
+                listExercises(request, response);
+                break;
+            default:
+                // Para cualquier otro valor de acción, se redirige a la lista de categorías por defecto
+                listCategories(request, response);
+                break;
         }
     }
 
-  private void listExercises(HttpServletRequest request, HttpServletResponse response)
+ private void listCategories(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
     try {
-        String categoriaParam = request.getParameter("categoria");
-        int idCategoriaSeleccionada = (categoriaParam != null && !categoriaParam.isEmpty()) ? Integer.parseInt(categoriaParam) : 0;
-
+        CategoriaDAO categoriaDAO = new CategoriaDAO();
+        List<Categoria> categorias = categoriaDAO.consultaGeneral();
         EjercicioDAO ejercicioDAO = new EjercicioDAO();
         List<Ejercicio> ejercicios = ejercicioDAO.obtenerTodosLosEjercicios();
 
-        // Coloca las listas en el alcance de la solicitud
-        request.setAttribute("listaEjercicios", ejercicios);
-        request.setAttribute("selectedCategoryId", idCategoriaSeleccionada);
+        // Obtener el ID de usuario desde la sesión
+        HttpSession session = request.getSession();
+        String correo = (String) session.getAttribute("correo");
+        int idUsuario = obtenerIdUsuarioPorCorreo(correo);
 
-        // Redirige a la vista JSP
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/Views/Rutina/CreateRutina.jsp");
-        dispatcher.forward(request, response);
+        // Obtener las rutinas del usuario
+        RutinaDAO rutinaDAO = new RutinaDAO();
+        List<Rutina> rutinas = rutinaDAO.obtenerRutinasPorUsuario(idUsuario);
+
+        // Colocar las listas en el alcance de la solicitud
+        request.setAttribute("listacategoria", categorias);
+        request.setAttribute("listaejercicios", ejercicios);
+        request.setAttribute("listarutina", rutinas);
+
+        // Redirigir a la vista JSP
+        request.getRequestDispatcher("/Views/Rutina/CreateRutina.jsp").forward(request, response);
     } catch (SQLException ex) {
-        // Registra la excepción en lugar de imprimir en la consola
-        ex.printStackTrace(); // O utiliza un sistema de registro
-
-        // Redirige a una página de error personalizada
-        response.sendRedirect(request.getContextPath() + "/error.jsp");
+        ex.printStackTrace();
+        response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error al obtener la lista de categorías y rutinas");
     }
 }
 
+    
+    
+    private void listRutina(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            String categoriaParam = request.getParameter("categoria");
+            int idCategoriaSeleccionada = (categoriaParam != null && !categoriaParam.isEmpty()) ? Integer.parseInt(categoriaParam) : 1;
+            
+             HttpSession session = request.getSession();
+            String correo = (String) session.getAttribute("correo");
+
+            // Obtener el ID de usuario desde la base de datos usando el correo electrónico
+            int idUsuario = obtenerIdUsuarioPorCorreo(correo);
+
+        
+
+            RutinaDAO rutinaDAO = new RutinaDAO();
+            List<Rutina> rutinas = rutinaDAO.obtenerRutinasPorUsuario(idUsuario);
+
+            // Coloca las listas en el alcance de la solicitud
+            request.setAttribute("listarutina", rutinas);
+            request.setAttribute("selectedCategoryId", idCategoriaSeleccionada);
+
+            // Redirige a la vista JSP
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/Views/Rutina/CreateRutina.jsp");
+            dispatcher.forward(request, response);
+        } catch (SQLException ex) {
+            // Registra la excepción en lugar de imprimir en la consola
+            ex.printStackTrace(); // O utiliza un sistema de registro
+
+            // Redirige a una página de error personalizada
+            response.sendRedirect(request.getContextPath() + "/error.jsp");
+        }
+    }
+
+    private void listExercises(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            String categoriaParam = request.getParameter("categoria");
+            int idCategoriaSeleccionada = (categoriaParam != null && !categoriaParam.isEmpty()) ? Integer.parseInt(categoriaParam) : 0;
+
+            EjercicioDAO ejercicioDAO = new EjercicioDAO();
+            List<Ejercicio> ejercicios = ejercicioDAO.obtenerTodosLosEjercicios();
+
+            // Coloca las listas en el alcance de la solicitud
+            request.setAttribute("listaEjercicios", ejercicios);
+            request.setAttribute("selectedCategoryId", idCategoriaSeleccionada);
+
+            // Redirige a la vista JSP
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/Views/Rutina/CreateRutina.jsp");
+            dispatcher.forward(request, response);
+        } catch (SQLException ex) {
+            // Registra la excepción en lugar de imprimir en la consola
+            ex.printStackTrace(); // O utiliza un sistema de registro
+
+            // Redirige a una página de error personalizada
+            response.sendRedirect(request.getContextPath() + "/error.jsp");
+        }
+    }
 
     /**
      * Handles the HTTP <code>POST</code> method.

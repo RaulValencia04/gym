@@ -72,42 +72,49 @@ public class RutinaDAO {
 
         return rutinas;
     }
-        public List<Rutina> obtenerRutinasPorUsuario(int idUsuario) throws SQLException {
-        List<Rutina> rutinas = new ArrayList<>();
+    public List<Rutina> obtenerRutinasPorUsuario(int idUsuario) throws SQLException {
+        Connection con = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
 
+        List<Rutina> rutinas = new ArrayList<>();
+
         try {
-            // Consulta SQL
-            String consultaSQL = "SELECT * FROM rutina r " +
+            // Obtener la conexión desde el método obtenerConexion de la clase Conexion
+            Conexion conexionDB = new Conexion();
+            con = conexionDB.obtenerConexion();
+
+            // Consulta SQL para obtener rutinas por usuario
+            String consultaSQL = "SELECT r.id_rutina,r.nombre,r.Dia,e.nombre,d.cantidad_reps FROM rutina r " +
                                 "INNER JOIN DetalleRutina d ON r.id_rutina = d.id_rutina " +
-                                "INNER JOIN usuarios u ON r.id_usuario = u.id_usuario " +
+                                "INNER JOIN usuarios u ON r.id_usuario = u.id_usuario"
+                                + " INNER JOIN ejercicios e ON e.id_ejercicio = d.id_ejercicio " +
                                 "WHERE u.id_usuario = ?";
-            statement = connection.prepareStatement(consultaSQL);
+            statement = con.prepareStatement(consultaSQL);
             statement.setInt(1, idUsuario);
             resultSet = statement.executeQuery();
 
+            // Procesar los resultados y crear objetos Rutina
             while (resultSet.next()) {
-                // Obtener datos de la rutina, detalles y usuario
-                int idRutina = resultSet.getInt("id_rutina");
-                String nombreRutina = resultSet.getString("nombre");
-                String diaRutina = resultSet.getString("Dia");
+                int idRutina = resultSet.getInt("r.id_rutina");
+                String nombre = resultSet.getString("r.nombre");
+                String dia = resultSet.getString("r.Dia");
+                String nombreEjercicio = resultSet.getString("e.nombre");
+                int repeticiones = resultSet.getInt("d.cantidad_reps");
 
-                // Puedes continuar extrayendo más columnas según sea necesario
-
-                // Crear objetos Rutina y agregar a la lista
-                Rutina rutina = new Rutina(nombreRutina, diaRutina, idUsuario);
+                Rutina rutina = new Rutina(nombre, dia,nombreEjercicio,repeticiones);
                 rutina.setIdRutina(idRutina);
+
                 rutinas.add(rutina);
             }
         } finally {
             // Cerrar recursos
-            cerrarRecursos( statement, resultSet);
+            cerrarRecursos(con, statement, resultSet);
         }
 
         return rutinas;
     }
-
+    
     public Rutina obtenerRutinaPorId(int idRutina) throws SQLException {
         Connection con = null;
         PreparedStatement statement = null;
