@@ -7,8 +7,6 @@ import Models.Usuario;
 import ModelsDAO.CategoriaDAO;
 import java.io.Console;
 
-
-
 import java.io.IOException;
 import java.io.PrintWriter;
 import static java.lang.System.console;
@@ -35,7 +33,7 @@ import ModelsDAO.EjercicioDAO;
  * @author Esau
  */
 
-@WebServlet(name = "EjerciciosController", urlPatterns = {"/MostrarFormCategoria", "/GuardarCategoria", "/MostrarFormEjercicio", "/GuardarEjercicio"})
+@WebServlet(name = "EjerciciosController", urlPatterns = {"/MostrarFormCategoria", "/GuardarCategoria", "/MostrarFormEjercicio", "/GuardarEjercicio", "/VerEjercicio", "/VerCategoria"})
 public class EjerciciosController extends HttpServlet {
      private EjercicioDAO ejercicioDAO;
 
@@ -57,6 +55,9 @@ public class EjerciciosController extends HttpServlet {
                 break;
              case "/MostrarFormEjercicio":
                 MostrarFormEjercicio(request, response);
+                break;
+            case "/VerCategoria":
+                VerCategoria(request, response);
                 break;
             default:
                 // Lógica para otras rutas si es necesario
@@ -187,6 +188,24 @@ public class EjerciciosController extends HttpServlet {
             // Manejo de errores (puedes personalizar esto según tus necesidades)
             response.sendRedirect("index.jsp");
         }
+    }
+    
+    
+    
+            
+    private void VerCategoria(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
+        HttpSession session = request.getSession(false);
+        
+            List<Categoria> listaCategorias = CategoriaDAO.consultaGeneral();
+
+                if (listaCategorias != null) {      
+                    // Pasar los datos del producto a la vista de edición
+                    request.setAttribute("listaCategorias", listaCategorias);
+                    RequestDispatcher dispatcher = request.getRequestDispatcher("Ejercicios/verCategorias.jsp");
+                    dispatcher.forward(request, response);
+                }
+                
     }
 
     

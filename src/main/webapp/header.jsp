@@ -24,23 +24,15 @@
           <div class="navbar-nav ml-auto p-4 bg-secondary">
               <a href="#" class="nav-item nav-link active">Home</a>
               <!-- <a class="nav-link " *ngIf="isLoggedIn()" aria-current="page" href="/ejercicios">Ejercicios</a> -->
-              <a class="nav-link "  aria-current="page" href="/categorias">Ejercicios</a>
+              <a class="nav-link "  aria-current="page" href="VerCategoria">Aprender GYM</a>
               <a class="nav-link "  aria-current="page" href="DatosController" id="datos">Datos Cuerpo</a>
               
+               <a class="nav-link "  aria-current="page" href="MostrarFormCategoria">Agregar Categorías</a>
+              </li></a>
+              <a class="nav-link "  aria-current="page" href="MostrarFormEjercicio" id="datos">Agregar Ejercicios</a>
+              
 
-            <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Agregar
-            </a>
-            <ul class="dropdown-menu">
-              <li class="dropdown-item">
-                <a href="/MostrarFormCategoria">Agregar Categorías</a>
-              </li>
-              <li class="dropdown-item">
-                <a href="/MostrarFormEjercicio">Agregar Ejercicios</a>
-              </li>
-            </ul>
-          </li>
+           
 
               
               
