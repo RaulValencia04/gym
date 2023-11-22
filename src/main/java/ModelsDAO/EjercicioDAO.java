@@ -12,19 +12,22 @@ import Models.Ejercicio;
 
 public class EjercicioDAO {
 
-    public void insertarEjercicio(Ejercicio ejercicio) throws SQLException {
+
+   public static boolean insertarEjercicio(Ejercicio ejercicio) {
         Connection con = null;
         PreparedStatement statement = null;
+        boolean exito = true;
 
+          
         try {
             Conexion conexionDB = new Conexion();
             con = conexionDB.obtenerConexion();
 
-            // Consulta SQL para insertar un nuevo ejercicio
-            String consultaSQL = "INSERT INTO ejercicios (nombre, imagen_url, descripcion, id_categoria) VALUES (?, ?, ?, ?)";
+            // Consulta SQL para insertar una nueva categoría
+             String consultaSQL = "INSERT INTO ejercicios (nombre, imagen_url, descripcion, id_categoria) VALUES (?, ?, ?, ?)";
             statement = con.prepareStatement(consultaSQL);
 
-            // Establecer los parámetros de la consulta con los valores del ejercicio
+            // Establecer los parámetros de la consulta con los valores de la categoría
             statement.setString(1, ejercicio.getNombre());
             statement.setString(2, ejercicio.getImagenUrl());
             statement.setString(3, ejercicio.getDescripcion());
@@ -32,20 +35,27 @@ public class EjercicioDAO {
 
             // Ejecutar la consulta
             statement.executeUpdate();
-        } finally {
-            // Cerrar recursos
+
+            // Confirmar la transacción si todo ha ido bien
+            con.commit();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            exito = false;
+
+            // Revertir la transacción en caso de excepción
             try {
-                if (statement != null) {
-                    statement.close();
-                }
                 if (con != null) {
-                    con.close();
+                    con.rollback();
                 }
-            } catch (SQLException e) {
-                e.printStackTrace();
+            } catch (SQLException rollbackException) {
+                rollbackException.printStackTrace();
             }
         }
+
+        // Devolver true si no hubo problemas
+        return exito;   
     }
+
 
     public List<Ejercicio> obtenerTodosLosEjercicios() throws SQLException {
         Connection con = null;

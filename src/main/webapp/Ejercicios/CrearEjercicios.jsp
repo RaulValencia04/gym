@@ -20,7 +20,7 @@
   <div class="container mt-5">
     <h2>Formulario de Ejercicio</h2>
     
-    <form action="GuardarEjercicios" method="post">
+    <form action="GuardarEjercicio" method="post">
       <div class="form-group">
         <label for="nombreEjercicio">Nombre del Ejercicio:</label>
         <input type="text" class="form-control" id="nombreEjercicio" name="nombreEjercicio" required>
@@ -38,12 +38,13 @@
 
       <div class="form-group">
         <label for="categoria">Categoría:</label>
-       <select name="categoria">
-            <c:forEach var="categoria" items="${listaCategorias}">
-                <option value="${categoria.idCategoria}">${categoria.descripcion}</option>
-            </c:forEach>
+        <select name="categoria" class="form-control form-control-lg text-success">
+          <c:forEach var="categoria" items="${listaCategorias}">
+            <option value="${categoria.idCategoria}">${categoria.descripcion}</option>
+          </c:forEach>
         </select>
       </div>
+
 
       <button type="submit" class="btn btn-primary">Enviar</button>
     </form>
