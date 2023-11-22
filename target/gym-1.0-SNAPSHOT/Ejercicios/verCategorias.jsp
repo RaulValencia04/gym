@@ -201,7 +201,7 @@
                     <div class="col-12 row justify-content-between">
                         <c:forEach var="categoria" items="${listaCategorias}">
                             <div class="col-md-4 mb-4">
-                                <form action="GuardarEjercicio" method="post" class="form-inline">
+                                <form action="VerEjercicio" method="post" class="form-inline">
                                     <button type="submit" class="sin-contorno">
                                         <div class="product mt-5">
                                             <div class="image">

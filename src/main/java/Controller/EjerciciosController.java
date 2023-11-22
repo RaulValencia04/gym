@@ -1,4 +1,3 @@
-
 package Controller;
 
 import Models.Categoria;
@@ -27,33 +26,31 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import ModelsDAO.EjercicioDAO;
 
-
 /**
  *
  * @author Esau
  */
-
 @WebServlet(name = "EjerciciosController", urlPatterns = {"/MostrarFormCategoria", "/GuardarCategoria", "/MostrarFormEjercicio", "/GuardarEjercicio", "/VerEjercicio", "/VerCategoria"})
 public class EjerciciosController extends HttpServlet {
-     private EjercicioDAO ejercicioDAO;
+
+    private EjercicioDAO ejercicioDAO;
 
     @Override
     public void init() throws ServletException {
         super.init();
         ejercicioDAO = new EjercicioDAO();
     }
-    
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-     String action = request.getServletPath();
+        String action = request.getServletPath();
         HttpSession session = request.getSession();
         switch (action) {
             case "/MostrarFormCategoria":
                 MostrarFormCategoria(request, response);
                 break;
-             case "/MostrarFormEjercicio":
+            case "/MostrarFormEjercicio":
                 MostrarFormEjercicio(request, response);
                 break;
             case "/VerCategoria":
@@ -74,76 +71,69 @@ public class EjerciciosController extends HttpServlet {
             case "/GuardarCategoria":
 
                 GuardarCategoria(request, response);
-                break; 
-                
-                 case "/GuardarEjercicio":
+                break;
 
+            case "/GuardarEjercicio":
                 GuardarEjercicio(request, response);
-                break; 
+                break;
+
+            case "/VerEjercicio":
+                VerEjercicio(request, response);
+                break;
+
             default:
                 // Lógica para otras rutas si es necesario
                 break;
         }
     }
-    
+
     private void MostrarFormCategoria(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
+            throws ServletException, IOException {
         HttpSession session = request.getSession(false);
 
-            RequestDispatcher dispatcher = request.getRequestDispatcher("Ejercicios/CrearCategorias.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("Ejercicios/CrearCategorias.jsp");
+        dispatcher.forward(request, response);
+
+    }
+
+    private void MostrarFormEjercicio(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        HttpSession session = request.getSession(false);
+
+        List<Categoria> listaCategorias = CategoriaDAO.consultaGeneral();
+
+        if (listaCategorias != null) {
+
+            // Pasar los datos del producto a la vista de edición
+            request.setAttribute("listaCategorias", listaCategorias);
+            RequestDispatcher dispatcher = request.getRequestDispatcher("Ejercicios/CrearEjercicios.jsp");
             dispatcher.forward(request, response);
- 
+        }
     }
-    
-    
-     private void MostrarFormEjercicio(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
-        HttpSession session = request.getSession(false);
-        
-            List<Categoria> listaCategorias = CategoriaDAO.consultaGeneral();
-            
 
-
-                if (listaCategorias != null) {
-                    
-
-                  
-
-                    // Pasar los datos del producto a la vista de edición
-                    request.setAttribute("listaCategorias", listaCategorias);
-                    RequestDispatcher dispatcher = request.getRequestDispatcher("Ejercicios/CrearEjercicios.jsp");
-                    dispatcher.forward(request, response);
-                }
-    }
-    
     private void GuardarCategoria(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
-                 HttpSession session = request.getSession();
-            
-             System.out.println("3333333333333 llego aqui");
-          
+            throws ServletException, IOException {
+        HttpSession session = request.getSession();
 
+        System.out.println("3333333333333 llego aqui");
 
-               
-            String nombreCategoria = request.getParameter("nombreCategoria");
-            String urlImagen = request.getParameter("urlImagen");
-            
-         
-          System.out.println(nombreCategoria);
-           System.out.println(urlImagen);
+        String nombreCategoria = request.getParameter("nombreCategoria");
+        String urlImagen = request.getParameter("urlImagen");
+
+        System.out.println(nombreCategoria);
+        System.out.println(urlImagen);
 
         Categoria nuevaCategoria = new Categoria(nombreCategoria, urlImagen);
 
         boolean exito = CategoriaDAO.insertarCategoria(nuevaCategoria);
 
         if (!exito) {
-             
-            
+
             // Redirige a la página de inicio de sesión o a donde desees
             session.setAttribute("successMessage", "Encuesta registrada correctamente.");
 
             response.sendRedirect("index.jsp");
-            
+
         } else {
             session.setAttribute("errorMessage", "Error al subir la encuesta");
 
@@ -151,37 +141,32 @@ public class EjerciciosController extends HttpServlet {
             response.sendRedirect("index.jsp");
         }
     }
-    
 
     private void GuardarEjercicio(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
-            HttpSession session = request.getSession();
-            
-               
-            String nombreCategoria = request.getParameter("nombreEjercicio");
-            String urlImagen = request.getParameter("urlImagen");
-            String descripcion = request.getParameter("descripcion");
-            String categoria = request.getParameter("categoria");
-            
-            int idCategoria = Integer.parseInt(categoria);
+            throws ServletException, IOException {
+        HttpSession session = request.getSession();
 
-            
-         
-            System.out.println(nombreCategoria);
-            System.out.println(urlImagen);
+        String nombreCategoria = request.getParameter("nombreEjercicio");
+        String urlImagen = request.getParameter("urlImagen");
+        String descripcion = request.getParameter("descripcion");
+        String categoria = request.getParameter("categoria");
 
-            Ejercicio nuevoEjercicio = new Ejercicio(nombreCategoria, urlImagen, descripcion, idCategoria);
+        int idCategoria = Integer.parseInt(categoria);
 
-             boolean exito = EjercicioDAO.insertarEjercicio(nuevoEjercicio);
+        System.out.println(nombreCategoria);
+        System.out.println(urlImagen);
+
+        Ejercicio nuevoEjercicio = new Ejercicio(nombreCategoria, urlImagen, descripcion, idCategoria);
+
+        boolean exito = EjercicioDAO.insertarEjercicio(nuevoEjercicio);
 
         if (!exito) {
-             
-            
+
             // Redirige a la página de inicio de sesión o a donde desees
             session.setAttribute("successMessage", "Encuesta registrada correctamente.");
 
             response.sendRedirect("index.jsp");
-            
+
         } else {
             session.setAttribute("errorMessage", "Error al subir la encuesta");
 
@@ -189,25 +174,45 @@ public class EjerciciosController extends HttpServlet {
             response.sendRedirect("index.jsp");
         }
     }
-    
-    
-    
-            
-    private void VerCategoria(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
-        HttpSession session = request.getSession(false);
-        
-            List<Categoria> listaCategorias = CategoriaDAO.consultaGeneral();
 
-                if (listaCategorias != null) {      
-                    // Pasar los datos del producto a la vista de edición
-                    request.setAttribute("listaCategorias", listaCategorias);
-                    RequestDispatcher dispatcher = request.getRequestDispatcher("Ejercicios/verCategorias.jsp");
-                    dispatcher.forward(request, response);
-                }
-                
+    private void VerCategoria(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        HttpSession session = request.getSession(false);
+
+        List<Categoria> listaCategorias = CategoriaDAO.consultaGeneral();
+
+        if (listaCategorias != null) {
+            // Pasar los datos del producto a la vista de edición
+            request.setAttribute("listaCategorias", listaCategorias);
+            RequestDispatcher dispatcher = request.getRequestDispatcher("Ejercicios/verCategorias.jsp");
+            dispatcher.forward(request, response);
+        }
+
     }
 
-    
-    
+    private void VerEjercicio(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        HttpSession session = request.getSession(false);
+        
+        String categoria = request.getParameter("cats");
+
+        int idCategoria = Integer.parseInt(categoria);
+
+        List<Ejercicio> listaEjercicio = null;
+        try {
+            listaEjercicio = EjercicioDAO.obtenerEjerciciosPorCategoria(idCategoria);
+        } catch (SQLException ex) {
+            Logger.getLogger(EjerciciosController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        if (listaEjercicio != null) {
+            System.out.println("99999999999999988888888887777777777 LEgua");
+            // Pasar los datos del producto a la vista de edición
+            request.setAttribute("listaEjercicio", listaEjercicio);
+            RequestDispatcher dispatcher = request.getRequestDispatcher("Ejercicios/verEjercicios.jsp");
+            dispatcher.forward(request, response);
+        }
+
+    }
+
 }
