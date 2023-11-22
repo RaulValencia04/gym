@@ -72,6 +72,41 @@ public class RutinaDAO {
 
         return rutinas;
     }
+        public List<Rutina> obtenerRutinasPorUsuario(int idUsuario) throws SQLException {
+        List<Rutina> rutinas = new ArrayList<>();
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+
+        try {
+            // Consulta SQL
+            String consultaSQL = "SELECT * FROM rutina r " +
+                                "INNER JOIN DetalleRutina d ON r.id_rutina = d.id_rutina " +
+                                "INNER JOIN usuarios u ON r.id_usuario = u.id_usuario " +
+                                "WHERE u.id_usuario = ?";
+            statement = connection.prepareStatement(consultaSQL);
+            statement.setInt(1, idUsuario);
+            resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                // Obtener datos de la rutina, detalles y usuario
+                int idRutina = resultSet.getInt("id_rutina");
+                String nombreRutina = resultSet.getString("nombre");
+                String diaRutina = resultSet.getString("Dia");
+
+                // Puedes continuar extrayendo más columnas según sea necesario
+
+                // Crear objetos Rutina y agregar a la lista
+                Rutina rutina = new Rutina(nombreRutina, diaRutina, idUsuario);
+                rutina.setIdRutina(idRutina);
+                rutinas.add(rutina);
+            }
+        } finally {
+            // Cerrar recursos
+            cerrarRecursos( statement, resultSet);
+        }
+
+        return rutinas;
+    }
 
     public Rutina obtenerRutinaPorId(int idRutina) throws SQLException {
         Connection con = null;
@@ -200,6 +235,19 @@ public class RutinaDAO {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+    }
+       private void cerrarRecursos(PreparedStatement statement, ResultSet resultSet) {
+        try {
+            if (resultSet != null) {
+                resultSet.close();
+            }
+            if (statement != null) {
+                statement.close();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            // Manejar la excepción según sea necesario
         }
     }
 }
