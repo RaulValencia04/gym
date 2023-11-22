@@ -30,7 +30,7 @@ import ModelsDAO.EjercicioDAO;
  *
  * @author Esau
  */
-@WebServlet(name = "EjerciciosController", urlPatterns = {"/MostrarFormCategoria", "/GuardarCategoria", "/MostrarFormEjercicio", "/GuardarEjercicio", "/VerEjercicio", "/VerCategoria"})
+@WebServlet(name = "EjerciciosController", urlPatterns = {"/MostrarFormCategoria", "/GuardarCategoria", "/MostrarFormEjercicio", "/GuardarEjercicio", "/VerEjercicio", "/VerCategoria", "/CrudCategorias", "/CrudEjercicios", "/EditarCategoria", "/EliminarCategoria", "/GuardarCategoriaEditada"})
 public class EjerciciosController extends HttpServlet {
 
     private EjercicioDAO ejercicioDAO;
@@ -56,6 +56,23 @@ public class EjerciciosController extends HttpServlet {
             case "/VerCategoria":
                 VerCategoria(request, response);
                 break;
+
+            case "/CrudCategorias":
+                CrudCategorias(request, response);
+                break;
+
+            case "/CrudEjercicios":
+                CrudEjercicios(request, response);
+                break;
+
+            case "/EditarCategoria":
+                EditarCategoria(request, response);
+                break;
+
+            case "/EliminarCategoria":
+                EliminarCategoria(request, response);
+                break;
+
             default:
                 // Lógica para otras rutas si es necesario
                 break;
@@ -81,6 +98,10 @@ public class EjerciciosController extends HttpServlet {
                 VerEjercicio(request, response);
                 break;
 
+            case "/GuardarCategoriaEditada":
+                GuardarCategoriaEditada(request, response);
+                break;
+
             default:
                 // Lógica para otras rutas si es necesario
                 break;
@@ -90,6 +111,7 @@ public class EjerciciosController extends HttpServlet {
     private void MostrarFormCategoria(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession(false);
+
 
         RequestDispatcher dispatcher = request.getRequestDispatcher("Ejercicios/CrearCategorias.jsp");
         dispatcher.forward(request, response);
@@ -215,6 +237,119 @@ public class EjerciciosController extends HttpServlet {
             // Pasar los datos del producto a la vista de edición
             request.setAttribute("listaEjercicio", listaEjercicio);
             RequestDispatcher dispatcher = request.getRequestDispatcher("Ejercicios/VerEjercicios.jsp");
+            dispatcher.forward(request, response);
+        }
+
+    }
+
+    private void CrudCategorias(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        HttpSession session = request.getSession(false);
+
+        List<Categoria> listaCategorias = CategoriaDAO.consultaGeneral();
+
+        if (listaCategorias != null) {
+            // Pasar los datos del producto a la vista de edición
+            request.setAttribute("listaCategorias", listaCategorias);
+            RequestDispatcher dispatcher = request.getRequestDispatcher("Ejercicios/CrudCategorias.jsp");
+            dispatcher.forward(request, response);
+        }
+
+    }
+
+    private void EditarCategoria(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        HttpSession session = request.getSession(false);
+
+        String idCategoriastr = request.getParameter("id");
+
+        int idCategoria = Integer.parseInt(idCategoriastr);
+
+        Categoria listaCategorias = CategoriaDAO.consultaPorId(idCategoria);
+
+        if (listaCategorias != null) {
+            // Pasar los datos del producto a la vista de edición
+            request.setAttribute("listaCategorias", listaCategorias);
+            RequestDispatcher dispatcher = request.getRequestDispatcher("Ejercicios/EditarCategoria.jsp");
+            dispatcher.forward(request, response);
+        }
+
+    }
+
+    private void CrudEjercicios(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        HttpSession session = request.getSession(false);
+
+        List<Categoria> listaCategorias = CategoriaDAO.consultaGeneral();
+
+        if (listaCategorias != null) {
+            // Pasar los datos del producto a la vista de edición
+            request.setAttribute("listaCategorias", listaCategorias);
+            RequestDispatcher dispatcher = request.getRequestDispatcher("Ejercicios/CrudEjercicios.jsp");
+            dispatcher.forward(request, response);
+        }
+
+    }
+
+    private void GuardarCategoriaEditada(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        HttpSession session = request.getSession();
+
+        String descripcion = request.getParameter("nombreCategoria");
+        String urlImagen = request.getParameter("urlImagen");
+        String categoria = request.getParameter("idCategoria");
+
+        int idCategoria = Integer.parseInt(categoria);
+
+        // Crear un objeto Producto con los datos editados
+        Categoria productoEditado = new Categoria(descripcion, urlImagen);
+        productoEditado.setIdCategoria(idCategoria);
+
+        // Lógica para guardar los cambios en la base de datos
+        boolean exito = CategoriaDAO.actualizarCategoria(productoEditado);
+
+        if (exito) {
+
+            // Redirige a la página de inicio de sesión o a donde desees
+            session.setAttribute("successMessage", "Categoria Actualizada Correctamente.");
+
+             List<Categoria> listaCategorias = CategoriaDAO.consultaGeneral();
+            // Pasar los datos del producto a la vista de edición
+            request.setAttribute("listaCategorias", listaCategorias);
+            RequestDispatcher dispatcher = request.getRequestDispatcher("Ejercicios/CrudCategorias.jsp");
+            dispatcher.forward(request, response);
+       
+
+        } else {
+            session.setAttribute("errorMessage", "Error al Actualizar la Categoria");
+
+            List<Categoria> listaCategorias = CategoriaDAO.consultaGeneral();
+            // Pasar los datos del producto a la vista de edición
+            request.setAttribute("listaCategorias", listaCategorias);
+            RequestDispatcher dispatcher = request.getRequestDispatcher("Ejercicios/CrudCategorias.jsp");
+            dispatcher.forward(request, response);
+        }
+    }
+    
+     private void EliminarCategoria(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        HttpSession session = request.getSession(false);
+
+        String idCategoriastr = request.getParameter("id");
+
+        int idCategoria = Integer.parseInt(idCategoriastr);
+
+
+        boolean exito = CategoriaDAO.eliminarCategoria(idCategoria);
+
+        if (exito) {
+             // Redirige a la página de inicio de sesión o a donde desees
+            session.setAttribute("successMessage", "Categoria Eliminada Correctamente.");
+
+             List<Categoria> listaCategorias = CategoriaDAO.consultaGeneral();
+            // Pasar los datos del producto a la vista de edición
+            request.setAttribute("listaCategorias", listaCategorias);
+            RequestDispatcher dispatcher = request.getRequestDispatcher("Ejercicios/CrudCategorias.jsp");
             dispatcher.forward(request, response);
         }
 
