@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 ModelsDAO/DetalleRutinaDAO.class
 Conexion/Conexion.class
 Models/Categoria.class
@@ -20,24 +19,3 @@ Models/DetalleRutina.class
 Controller/DatosController.class
 ModelsDAO/EjercicioDAO.class
 ModelsDAO/RutinaDAO.class
-=======
-com\mycompany\gym\resources\JakartaEE8Resource.class
-ModelsDAO\DatosCuerpoDAO.class
-ModelsDAO\RutinaDAO.class
-Models\DatosCuerpo.class
-Controller\DetalleEjercicioController.class
-Models\Ejercicio.class
-Conexion\Conexion.class
-Models\Usuario.class
-com\mycompany\gym\JakartaRestConfiguration.class
-Models\Categoria.class
-Models\DetalleRutina.class
-Controller\DatosController.class
-ModelsDAO\DetalleRutinaDAO.class
-ModelsDAO\UsuarioDAO.class
-Controller\LoginController.class
-Controller\UsuarioController.class
-Controller\RutinaController.class
-Models\Rutina.class
-ModelsDAO\EjercicioDAO.class
->>>>>>> e273569fff189cbeee35927a9f7dd4b167a8aa4c

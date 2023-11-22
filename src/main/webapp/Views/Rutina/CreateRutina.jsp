@@ -52,8 +52,12 @@
                                         <input type="text" class="form-control " name="Dia" id="recipient-name" readonly>
                                     </div>
                                     <div class="mb-3">
-                                        <label for="recipient-name2" class="col-form-label rut">Rutina:</label>
-                                        <input type="text" class="form-control"  name="rutina" id="recipient-name2" readonly>
+                                        <label for="ejercicio-select" class="col-form-label">Categoria</label>
+                                        <select class="form-select" id="ejercicio-select" name="categoria">
+                                            <c:forEach var="categoria" items="${listacategoria}">
+                                                <option value="${categoria.idCategoria}">${categoria.idCategoria}</option>
+                                            </c:forEach>
+                                        </select>
                                     </div>
 
                                     <div class="mb-3">

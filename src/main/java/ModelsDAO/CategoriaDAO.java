@@ -128,7 +128,6 @@ public static List<Categoria> consultaGeneral() {
 }
 
 
-
     
     
 }
