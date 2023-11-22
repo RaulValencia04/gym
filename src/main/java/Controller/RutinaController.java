@@ -71,41 +71,29 @@ public class RutinaController extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+ protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-          EjercicioDAO ejercicioDAO = new EjercicioDAO();
-        List<Ejercicio> ejercicios = null;
-        
-        
-        
-        
-        
         try {
-            CategoriaDAO cate = new CategoriaDAO();
-              List<Categoria> categoria = null;
-//            categoria = CategoriaDAO.obtenerTodasCategorias();
-            
-            ejercicios = ejercicioDAO.obtenerTodosLosEjercicios();
-            System.out.println("Número de cates: " + categoria);//si me imprime la cantidad de ejercicios
+            CategoriaDAO categoriaDAO = new CategoriaDAO();
+            List<Categoria> categorias = categoriaDAO.consultaGeneral();
 
+            // Obtén la categoría seleccionada
+            int idCategoriaSeleccionada = Integer.parseInt(request.getParameter("categoria"));
+
+            EjercicioDAO ejercicioDAO = new EjercicioDAO();
+            List<Ejercicio> ejercicios = ejercicioDAO.obtenerEjerciciosPorCategoria(idCategoriaSeleccionada);
+
+            // Coloca las listas en el alcance de la solicitud
+            request.setAttribute("listacategoria", categorias);
+            request.setAttribute("listaEjercicios", ejercicios);
+            request.setAttribute("selectedCategoryId", idCategoriaSeleccionada);
+
+            // Redirige a la vista JSP
+            request.getRequestDispatcher("./Views/Rutina/CreateRutina.jsp").forward(request, response);
         } catch (SQLException ex) {
-            Logger.getLogger(DetalleEjercicioController.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error al obtener la lista de ejercicios");
         }
-
-        // Colocar la lista de ejercicios en el alcance de la solicitud
-        request.setAttribute("listaEjercicios", ejercicios);
-
-
-        // Redirigir a la vista JSP
-
-        
-        
-        request.getRequestDispatcher("./Views/Rutina/CreateRutina.jsp").forward(request, response);
-        
-        
-        
     }
 
     /**

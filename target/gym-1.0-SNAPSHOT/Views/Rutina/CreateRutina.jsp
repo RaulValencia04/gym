@@ -51,14 +51,16 @@
                                         <label for="recipient-name" class="col-form-label">Día:</label>
                                         <input type="text" class="form-control " name="Dia" id="recipient-name" readonly>
                                     </div>
-                                    <div class="mb-3">
-                                        <label for="ejercicio-select" class="col-form-label">Categoria</label>
-                                        <select class="form-select" id="ejercicio-select" name="categoria">
-                                            <c:forEach var="categoria" items="${listacategoria}">
-                                                <option value="${categoria.idCategoria}">${categoria.idCategoria}</option>
-                                            </c:forEach>
-                                        </select>
-                                    </div>
+                                    <form action="RutinaController" method="get" id="categoriaForm">
+                                        <div class="mb-3">
+                                            <label for="categoria-select" class="col-form-label">Categoria</label>
+                                            <select class="form-select" id="categoria-select" name="categoria" onchange="document.getElementById('categoriaForm').submit();">
+                                                <c:forEach var="categoria" items="${listacategoria}">
+                                                    <option value="${categoria.idCategoria}" ${categoria.idCategoria eq selectedCategoryId ? 'selected' : ''}>${categoria.descripcion}</option>
+                                                </c:forEach>
+                                            </select>
+                                        </div>
+                                    </form>
 
                                     <div class="mb-3">
                                         <label for="ejercicio-select" class="col-form-label">Ejercicio:</label>
@@ -100,19 +102,19 @@
         <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI/tT1h1eeN/U9gIxpCUFMw+uVoF6A5eTqrs9iE=" crossorigin="anonymous"></script>
 
         <script>
-                                function abrirModal(dia) {
-                                    // Actualiza el campo de entrada con el día y la rutina seleccionados
-                                    var modal = document.getElementById('exampleModal');
-                                    var inputDia = modal.querySelector('#recipient-name');
-                                    var inputRutina = modal.querySelector('#recipient-name2');
+            function abrirModal(dia) {
+                // Actualiza el campo de entrada con el día y la rutina seleccionados
+                var modal = document.getElementById('exampleModal');
+                var inputDia = modal.querySelector('#recipient-name');
+                var inputRutina = modal.querySelector('#recipient-name2');
 
-                                    inputDia.value = dia;
-                                    inputRutina.value = rutina;
+                inputDia.value = dia;
+                inputRutina.value = rutina;
 
-                                    // Abre el modal
-                                    var myModal = new bootstrap.Modal(modal);
-                                    myModal.show();
-                                }
+                // Abre el modal
+                var myModal = new bootstrap.Modal(modal);
+                myModal.show();
+            }
         </script>
 
     </body>

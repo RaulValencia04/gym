@@ -96,5 +96,57 @@ public class EjercicioDAO {
         return ejercicios;
     }
 
+    public List<Ejercicio> obtenerEjerciciosPorCategoria(int idCategoriaSeleccionada) throws SQLException {
+         Connection con = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+
+        List<Ejercicio> ejercicios = new ArrayList<>();
+
+        try {
+            Conexion conexionDB = new Conexion();
+            con = conexionDB.obtenerConexion();
+
+            // Consulta SQL para obtener todos los ejercicios
+            String consultaSQL = "SELECT * FROM ejercicios where id_categoria = ?";
+            statement = con.prepareStatement(consultaSQL);
+             statement.setInt(1, idCategoriaSeleccionada);
+            resultSet = statement.executeQuery();
+
+            // Procesar los resultados y crear objetos Ejercicio
+            while (resultSet.next()) {
+                int idEjercicio = resultSet.getInt("id_ejercicio");
+                String nombre = resultSet.getString("nombre");
+                String imagenUrl = resultSet.getString("imagen_url");
+                String descripcion = resultSet.getString("descripcion");
+                int idCategoria = resultSet.getInt("id_categoria");
+
+                Ejercicio ejercicio = new Ejercicio(nombre, imagenUrl, descripcion, idCategoria);
+                ejercicio.setIdEjercicio(idEjercicio);
+
+                ejercicios.add(ejercicio);
+            }
+        } finally {
+            // Cerrar recursos
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (statement != null) {
+                    statement.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return ejercicios;
+        
+        
+    }
+
 
 }
