@@ -5,6 +5,8 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,7 +20,7 @@
   <div class="container mt-5">
     <h2>Formulario de Ejercicio</h2>
     
-    <form action="procesar_ejercicio.php" method="post">
+    <form action="GuardarEjercicios" method="post">
       <div class="form-group">
         <label for="nombreEjercicio">Nombre del Ejercicio:</label>
         <input type="text" class="form-control" id="nombreEjercicio" name="nombreEjercicio" required>
@@ -36,11 +38,11 @@
 
       <div class="form-group">
         <label for="categoria">Categoría:</label>
-        <select class="form-control" id="categoria" name="categoria" required>
-          <!-- Aquí deberías cargar dinámicamente las opciones del ComboBox desde tu base de datos -->
-          <option value="1">Categoría 1</option>
-          <option value="2">Categoría 2</option>
-          <option value="3">Categoría 3</option>
+       <select name="categoria">
+            <option value="">Seleccione una categoría</option>
+            <c:forEach var="categoria" items="${listaCategorias}">
+                <option value="${categoria.id}">${categoria.descripcion}</option>
+            </c:forEach>
         </select>
       </div>
 

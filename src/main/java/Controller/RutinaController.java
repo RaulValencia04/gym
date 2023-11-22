@@ -5,9 +5,11 @@
 package Controller;
 
 import Conexion.Conexion;
+import Models.Categoria;
 import Models.DetalleRutina;
 import Models.Ejercicio;
 import Models.Rutina;
+import ModelsDAO.CategoriaDAO;
 import ModelsDAO.DetalleRutinaDAO;
 import ModelsDAO.EjercicioDAO;
 import ModelsDAO.RutinaDAO;
@@ -51,7 +53,7 @@ public class RutinaController extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet RutinaController</title>");            
+            out.println("<title>Servlet RutinaController</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet RutinaController at " + request.getContextPath() + "</h1>");
@@ -72,29 +74,27 @@ public class RutinaController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-          EjercicioDAO ejercicioDAO = new EjercicioDAO();
-        List<Ejercicio> ejercicios = null;
-        try {
-            ejercicios = ejercicioDAO.obtenerTodosLosEjercicios();
-            System.out.println("Número de ejercicios: " + ejercicios);//si me imprime la cantidad de ejercicios
 
+        EjercicioDAO ejercicioDAO = new EjercicioDAO();
+        List<Ejercicio> ejercicios = null;
+
+        try {
+            CategoriaDAO cate = new CategoriaDAO();
         } catch (SQLException ex) {
-            Logger.getLogger(DetalleEjercicioController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(RutinaController.class.getName()).log(Level.SEVERE, null, ex);
         }
+        List<Categoria> categoria = null;
+
+        //            Lcate = CategoriaDAO.
+//            ejercicios = ejercicioDAO.obtenerTodosLosEjercicios();
+        System.out.println("Número de ejercicios: " + ejercicios);//si me imprime la cantidad de ejercicios
 
         // Colocar la lista de ejercicios en el alcance de la solicitud
         request.setAttribute("listaEjercicios", ejercicios);
 
-
         // Redirigir a la vista JSP
-
-        
-        
         request.getRequestDispatcher("./Views/Rutina/CreateRutina.jsp").forward(request, response);
-        
-        
-        
+
     }
 
     /**
@@ -105,53 +105,52 @@ public class RutinaController extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
- @Override
-protected void doPost(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
-    try {
-        // Recopilar datos del formulario
-        String nombreRutina = request.getParameter("rutina");
-        String dia = request.getParameter("Dia");
-        String[] ejercicios = request.getParameterValues("ejercicios");
-        String[] repeticiones = request.getParameterValues("repeticiones");
-        
-        
-        HttpSession session = request.getSession();
-        String correo = (String) session.getAttribute("correo");
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            // Recopilar datos del formulario
+            String nombreRutina = request.getParameter("rutina");
+            String dia = request.getParameter("Dia");
+            String[] ejercicios = request.getParameterValues("ejercicios");
+            String[] repeticiones = request.getParameterValues("repeticiones");
 
-        // Obtener el ID de usuario desde la base de datos usando el correo electrónico
-        int idUsuario = obtenerIdUsuarioPorCorreo(correo);
+            HttpSession session = request.getSession();
+            String correo = (String) session.getAttribute("correo");
 
-        // Crear objeto Rutina
-        Rutina rutina = new Rutina(nombreRutina, dia, idUsuario); // Asegúrate de tener el idUsuario disponible
+            // Obtener el ID de usuario desde la base de datos usando el correo electrónico
+            int idUsuario = obtenerIdUsuarioPorCorreo(correo);
 
-        // Guardar la rutina en la base de datos
-        RutinaDAO rutinaDAO = new RutinaDAO();
-        rutinaDAO.insertarRutina(rutina);
+            // Crear objeto Rutina
+            Rutina rutina = new Rutina(nombreRutina, dia, idUsuario); // Asegúrate de tener el idUsuario disponible
 
-        // Obtener el ID de la rutina recién insertada
-        int idRutina = rutinaDAO.obtenerIdRutina(); // Puedes agregar este método a RutinaDAO
+            // Guardar la rutina en la base de datos
+            RutinaDAO rutinaDAO = new RutinaDAO();
+            rutinaDAO.insertarRutina(rutina);
 
-        // Guardar detalles de la rutina
-        DetalleRutinaDAO detalleRutinaDAO = new DetalleRutinaDAO();
-        for (int i = 0; i < ejercicios.length; i++) {
-            int idEjercicio = Integer.parseInt(ejercicios[i]);
-            int cantidadReps = Integer.parseInt(repeticiones[i]);
+            // Obtener el ID de la rutina recién insertada
+            int idRutina = rutinaDAO.obtenerIdRutina(); // Puedes agregar este método a RutinaDAO
 
-            DetalleRutina detalleRutina = new DetalleRutina(idEjercicio, idRutina, cantidadReps);
-            detalleRutinaDAO.insertarDetalleRutina(detalleRutina);
+            // Guardar detalles de la rutina
+            DetalleRutinaDAO detalleRutinaDAO = new DetalleRutinaDAO();
+            for (int i = 0; i < ejercicios.length; i++) {
+                int idEjercicio = Integer.parseInt(ejercicios[i]);
+                int cantidadReps = Integer.parseInt(repeticiones[i]);
+
+                DetalleRutina detalleRutina = new DetalleRutina(idEjercicio, idRutina, cantidadReps);
+                detalleRutinaDAO.insertarDetalleRutina(detalleRutina);
+            }
+
+            // Redirigir a alguna página de éxito
+            response.sendRedirect("/RutinaController");
+        } catch (SQLException ex) {
+            // Manejar errores
+            ex.printStackTrace();
+            response.sendRedirect("error.jsp");
         }
-
-        // Redirigir a alguna página de éxito
-        response.sendRedirect("/RutinaController");
-    } catch (SQLException ex) {
-        // Manejar errores
-        ex.printStackTrace();
-        response.sendRedirect("error.jsp");
     }
-}
 
- private int obtenerIdUsuarioPorCorreo(String correo) throws SQLException {
+    private int obtenerIdUsuarioPorCorreo(String correo) throws SQLException {
         int idUsuario = -1;
         Connection con = null;
         PreparedStatement statement = null;
@@ -168,7 +167,7 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
             statement.setString(1, correo);
 
             // Ejecuta la consulta
-            try (ResultSet resultSet = statement.executeQuery()) {
+            try ( ResultSet resultSet = statement.executeQuery()) {
                 // Verifica si se encontró un resultado
                 if (resultSet.next()) {
                     idUsuario = resultSet.getInt("id_usuario");
@@ -188,10 +187,8 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
             }
         }
 
-        return idUsuario*1;
+        return idUsuario * 1;
     }
-
-
 
     /**
      * Returns a short description of the servlet.

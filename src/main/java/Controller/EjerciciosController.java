@@ -35,7 +35,7 @@ import ModelsDAO.EjercicioDAO;
  * @author Esau
  */
 
-@WebServlet(name = "EjerciciosController", urlPatterns = {"/MostrarFormCategoria", "/GuardarCategoria", "/MnstrarFormEjercicio", "/GuardarEjercicio"})
+@WebServlet(name = "EjerciciosController", urlPatterns = {"/MostrarFormCategoria", "/GuardarCategoria", "/MostrarFormEjercicio", "/GuardarEjercicio"})
 public class EjerciciosController extends HttpServlet {
      private EjercicioDAO ejercicioDAO;
 
@@ -106,21 +106,20 @@ public class EjerciciosController extends HttpServlet {
         throws ServletException, IOException {
         HttpSession session = request.getSession(false);
         
-        Usuario cliente = (Usuario) session.getAttribute("cliente");
-        int valor = cliente.getIdUsuario();
-         
-        if (valor != 0) {
+            List<Categoria> listaCategorias = CategoriaDAO.consultaGeneral();
+            
 
-            // Si no existe una sesión de usuario, muestra el formulario de registro
-            RequestDispatcher dispatcher = request.getRequestDispatcher("Ejercicios/CrearEjercicio.jsp");
-            dispatcher.forward(request, response);
-                
 
-        } else {
-            session.setAttribute("errorMessage", "2Error al cargar editar producto");
-            // Manejo de error si no se proporciona un ID válido en la ruta
-            response.sendRedirect("clientes?error=true");
-        }     
+                if (listaCategorias != null) {
+                    
+                    // Imprimir la lista de categorías en la consola
+                    System.out.println("5555555555555555"+listaCategorias);
+
+                    // Pasar los datos del producto a la vista de edición
+                    request.setAttribute("listaCategorias", listaCategorias);
+                    RequestDispatcher dispatcher = request.getRequestDispatcher("Ejercicios/CrearEjercicios.jsp");
+                    dispatcher.forward(request, response);
+                }
     }
     
     private void GuardarCategoria(HttpServletRequest request, HttpServletResponse response)
