@@ -5,9 +5,13 @@ package Controller;
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
 
+import Conexion.Conexion;
 import Models.Usuario;
 import ModelsDAO.UsuarioDAO;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import javax.servlet.ServletException;
@@ -58,6 +62,45 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response)
                 response.sendRedirect(request.getContextPath() + "/UsuarioController");
             }
         }
+    }
+        private int obtenerIdUsuarioPorCorreo(String correo) throws SQLException {
+        int idUsuario = -1;
+        Connection con = null;
+        PreparedStatement statement = null;
+        try {
+            // Obtén una instancia de la clase Conexion
+            Conexion conexionDB = new Conexion();
+
+            // Establece la conexión a la base de datos
+            con = conexionDB.obtenerConexion();
+
+            // Define la consulta SQL para obtener el ID de usuario por correo
+            String consultaSQL = "SELECT id_usuario FROM usuarios WHERE correo = ?";
+            statement = con.prepareStatement(consultaSQL);
+            statement.setString(1, correo);
+
+            // Ejecuta la consulta
+            try (ResultSet resultSet = statement.executeQuery()) {
+                // Verifica si se encontró un resultado
+                if (resultSet.next()) {
+                    idUsuario = resultSet.getInt("id_usuario");
+                }
+            }
+        } finally {
+            // Cierra recursos
+            try {
+                if (statement != null) {
+                    statement.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return idUsuario;
     }
 }
 

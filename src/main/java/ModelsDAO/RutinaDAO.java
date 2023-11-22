@@ -21,7 +21,7 @@ public class RutinaDAO {
             con = conexionDB.obtenerConexion();
 
             // Consulta SQL para insertar una nueva rutina
-            String consultaSQL = "INSERT INTO Rutina (nombre, dia, id_usuario) VALUES (?, ?, ?, ?)";
+            String consultaSQL = "INSERT INTO Rutina (nombre, dia, id_usuario) VALUES ( ?, ?, ?)";
             statement = con.prepareStatement(consultaSQL);
 
             // Establecer los parámetros de la consulta con los valores de la rutina
@@ -132,6 +132,37 @@ public class RutinaDAO {
             // Cerrar recursos
             cerrarRecursos(con, statement, null);
         }
+    }
+
+    public int obtenerIdRutina() throws SQLException {
+        Connection con = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+
+        try {
+            Conexion conexionDB = new Conexion();
+            con = conexionDB.obtenerConexion();
+
+            // Consulta SQL para obtener una rutina por ID
+            String consultaSQL = "SELECT id_rutina FROM Rutina\n"
+                    + "ORDER BY id_rutina DESC\n"
+                    + "LIMIT 1;";
+            statement = con.prepareStatement(consultaSQL);
+            resultSet = statement.executeQuery();
+
+            // Procesar los resultados y crear un objeto Rutina
+            if (resultSet.next()) {
+               
+                int idRutina = resultSet.getInt("id_rutina");
+
+                return idRutina;
+            }
+        } finally {
+            // Cerrar recursos
+            cerrarRecursos(con, statement, resultSet);
+        }
+
+        return 1;
     }
 
     public void eliminarRutina(int idRutina) throws SQLException {
