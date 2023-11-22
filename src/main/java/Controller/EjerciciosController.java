@@ -193,7 +193,7 @@ public class EjerciciosController extends HttpServlet {
     private void VerEjercicio(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession(false);
-        
+
         String categoria = request.getParameter("cats");
 
         int idCategoria = Integer.parseInt(categoria);
@@ -206,10 +206,15 @@ public class EjerciciosController extends HttpServlet {
         }
 
         if (listaEjercicio != null) {
-            System.out.println("99999999999999988888888887777777777 LEgua");
+
+            for (Ejercicio ejercicio : listaEjercicio) {
+                System.out.println("ID: " + ejercicio.getIdEjercicio() + ", Nombre: " + ejercicio.getNombre() + ", Descripción: " + ejercicio.getDescripcion());
+                // Puedes imprimir más atributos según la estructura de tu objeto Ejercicio
+            }
+
             // Pasar los datos del producto a la vista de edición
             request.setAttribute("listaEjercicio", listaEjercicio);
-            RequestDispatcher dispatcher = request.getRequestDispatcher("Ejercicios/verEjercicios.jsp");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("Ejercicios/VerEjercicios.jsp");
             dispatcher.forward(request, response);
         }
 
