@@ -74,6 +74,11 @@ public class EjerciciosController extends HttpServlet {
 
                 GuardarCategoria(request, response);
                 break; 
+                
+                 case "/GuardarEjercicio":
+
+                GuardarEjercicio(request, response);
+                break; 
             default:
                 // Lógica para otras rutas si es necesario
                 break;
@@ -83,22 +88,10 @@ public class EjerciciosController extends HttpServlet {
     private void MostrarFormCategoria(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
         HttpSession session = request.getSession(false);
-        
-//        Usuario cliente = (Usuario) session.getAttribute("cliente");
-//        int valor = cliente.getIdUsuario();
-//         
-//        if (valor != 0) {
 
-            // Si no existe una sesión de usuario, muestra el formulario de registro
             RequestDispatcher dispatcher = request.getRequestDispatcher("Ejercicios/CrearCategorias.jsp");
             dispatcher.forward(request, response);
-                
-
-//        } else {
-//            session.setAttribute("errorMessage", "2Error al cargar editar producto");
-//            // Manejo de error si no se proporciona un ID válido en la ruta
-//            response.sendRedirect("clientes?error=true");
-//        }     
+ 
     }
     
     
@@ -112,8 +105,8 @@ public class EjerciciosController extends HttpServlet {
 
                 if (listaCategorias != null) {
                     
-                    // Imprimir la lista de categorías en la consola
-                    System.out.println("5555555555555555"+listaCategorias);
+
+                  
 
                     // Pasar los datos del producto a la vista de edición
                     request.setAttribute("listaCategorias", listaCategorias);
@@ -159,6 +152,43 @@ public class EjerciciosController extends HttpServlet {
     }
     
 
+    private void GuardarEjercicio(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
+            HttpSession session = request.getSession();
             
+               
+            String nombreCategoria = request.getParameter("nombreEjercicio");
+            String urlImagen = request.getParameter("urlImagen");
+            String descripcion = request.getParameter("descripcion");
+            String categoria = request.getParameter("categoria");
+            
+            int idCategoria = Integer.parseInt(categoria);
 
+            
+         
+            System.out.println(nombreCategoria);
+            System.out.println(urlImagen);
+
+            Ejercicio nuevoEjercicio = new Ejercicio(nombreCategoria, urlImagen, descripcion, idCategoria);
+
+             boolean exito = EjercicioDAO.insertarEjercicio(nuevoEjercicio);
+
+        if (!exito) {
+             
+            
+            // Redirige a la página de inicio de sesión o a donde desees
+            session.setAttribute("successMessage", "Encuesta registrada correctamente.");
+
+            response.sendRedirect("index.jsp");
+            
+        } else {
+            session.setAttribute("errorMessage", "Error al subir la encuesta");
+
+            // Manejo de errores (puedes personalizar esto según tus necesidades)
+            response.sendRedirect("index.jsp");
+        }
+    }
+
+    
+    
 }
