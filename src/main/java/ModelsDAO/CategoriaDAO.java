@@ -70,8 +70,7 @@ public static List<Categoria> consultaGeneral() {
     PreparedStatement statement = null;
     ResultSet resultSet = null;
     List<Categoria> categorias = new ArrayList<>();
-    
-    System.out.println("99999999999999999999");
+   
 
     try {
         Conexion conexionDB = new Conexion();
@@ -86,43 +85,25 @@ public static List<Categoria> consultaGeneral() {
         // Ejecutar la consulta
         resultSet = statement.executeQuery();
         
-        System.out.println("0000000000000000000000");
+
 
         // Iterar sobre los resultados de la consulta
         while (resultSet.next()) {
             
-            System.out.println("1111111111111111111111111");
             // Crear una nueva categoría a partir de los resultados de la consulta
             Categoria categoria = new Categoria();
-             
-            categoria.setIdCategoria(resultSet.getInt("idCategoria"));
-            
+            categoria.setIdCategoria(resultSet.getInt("id_categoria"));
             categoria.setDescripcion(resultSet.getString("descripcion"));
             categoria.setImgUrl(resultSet.getString("img_url"));
 
-  
-            
             // Añadir la categoría a la lista
             categorias.add(categoria);
         }
     } catch (SQLException e) {
+        
         e.printStackTrace();
-    } finally {
-        try {
-            if (con != null) {
-                con.close();
-            }
-            if (statement != null) {
-                statement.close();
-            }
-            if (resultSet != null) {
-                resultSet.close();
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
+        
+    } 
     // Devolver la lista de categorías
     return categorias;
 }
