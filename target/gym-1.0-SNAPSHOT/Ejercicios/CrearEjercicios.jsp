@@ -39,9 +39,8 @@
       <div class="form-group">
         <label for="categoria">Categoría:</label>
        <select name="categoria">
-            <option value="">Seleccione una categoría</option>
             <c:forEach var="categoria" items="${listaCategorias}">
-                <option value="${categoria.id}">${categoria.descripcion}</option>
+                <option value="${categoria.idCategoria}">${categoria.descripcion}</option>
             </c:forEach>
         </select>
       </div>

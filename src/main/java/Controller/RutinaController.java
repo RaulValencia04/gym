@@ -85,7 +85,7 @@ public class RutinaController extends HttpServlet {
         try {
             CategoriaDAO cate = new CategoriaDAO();
               List<Categoria> categoria = null;
-            categoria = CategoriaDAO.obtenerTodasCategorias();
+//            categoria = CategoriaDAO.obtenerTodasCategorias();
             
             ejercicios = ejercicioDAO.obtenerTodosLosEjercicios();
             System.out.println("Número de cates: " + categoria);//si me imprime la cantidad de ejercicios
