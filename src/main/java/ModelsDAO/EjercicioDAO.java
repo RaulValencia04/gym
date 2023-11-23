@@ -264,9 +264,8 @@ public class EjercicioDAO {
         // Devolver la categoría encontrada (o null si no se encuentra)
         return ejercicio;
     }
-    
-    
-        public static boolean eliminarEjercicio(int idEjercicio) {
+
+    public static boolean eliminarEjercicio(int idEjercicio) {
         Connection con = null;
         PreparedStatement statement = null;
 
@@ -316,4 +315,64 @@ public class EjercicioDAO {
             }
         }
     }
+
+    public static boolean actualizarEjercicio(Ejercicio ejercicio) {
+        Connection con = null;
+        PreparedStatement statement = null;
+
+        try {
+            Conexion conexionDB = new Conexion();
+            con = conexionDB.obtenerConexion();
+
+            // Consulta SQL para actualizar un ejercicio por su ID
+            String consultaSQL = "UPDATE ejercicios SET nombre = ?, imagen_url = ?, descripcion = ?, id_categoria = ? WHERE id_ejercicio = ?";
+
+            // Imprimir información de depuración
+            System.out.println("ID Ejercicio: " + ejercicio.getIdEjercicio());
+            System.out.println("Nuevo nombre: " + ejercicio.getNombre());
+            System.out.println("Nueva URL de imagen: " + ejercicio.getImagenUrl());
+            System.out.println("Nueva descripción: " + ejercicio.getDescripcion());
+            System.out.println("Nuevo ID de categoría: " + ejercicio.getIdCategoria());
+
+            // Crear un objeto PreparedStatement
+            statement = con.prepareStatement(consultaSQL);
+
+            // Establecer los parámetros en la consulta
+            statement.setString(1, ejercicio.getNombre());
+            statement.setString(2, ejercicio.getImagenUrl());
+            statement.setString(3, ejercicio.getDescripcion());
+            statement.setInt(4, ejercicio.getIdCategoria());
+            statement.setInt(5, ejercicio.getIdEjercicio());
+
+            // Ejecutar la actualización y devolver true si se actualizó al menos un registro
+            int filasActualizadas = statement.executeUpdate();
+
+            // Imprimir información de depuración
+            System.out.println("Filas actualizadas: " + filasActualizadas);
+
+            return filasActualizadas > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false; // Devolver false en caso de error
+        } finally {
+            // Cerrar recursos (Statement, Connection) en un bloque finally
+            // para garantizar que se cierren correctamente incluso si ocurre una excepción.
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (con != null) {
+                try {
+                    con.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
 }

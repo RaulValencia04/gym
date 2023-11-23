@@ -108,7 +108,7 @@ public class EjerciciosController extends HttpServlet {
                 GuardarCategoriaEditada(request, response);
                 break;
             case "/GuardarEjercicioEditado":
-               // GuardarEjercicioEditado(request, response);
+                GuardarEjercicioEditado(request, response);
                 break;
             default:
                 // Lógica para otras rutas si es necesario
@@ -338,6 +338,59 @@ public class EjerciciosController extends HttpServlet {
             dispatcher.forward(request, response);
         }
     }
+    
+    
+     private void GuardarEjercicioEditado(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        HttpSession session = request.getSession();
+
+        String nombre = request.getParameter("nombreEjercicio");
+        String urlImagen = request.getParameter("urlImagen");
+        String descripcion = request.getParameter("descripcion");
+        String ejercicio = request.getParameter("id");
+
+        int ejercicioId = Integer.parseInt(ejercicio);
+        
+        
+        String categoria = request.getParameter("categoria");
+
+        int idCategoria = Integer.parseInt(categoria);
+        
+        
+
+        // Crear un objeto Producto con los datos editados
+        Ejercicio productoEditado = new Ejercicio(ejercicioId, nombre, urlImagen, descripcion, idCategoria);
+
+
+        // Lógica para guardar los cambios en la base de datos
+        boolean exito = EjercicioDAO.actualizarEjercicio(productoEditado);
+
+        if (exito) {
+
+            // Redirige a la página de inicio de sesión o a donde desees
+            session.setAttribute("successMessage", "Categoria Eliminada Correctamente.");
+
+             List<Ejercicio> listaEjercicios = EjercicioDAO.consultaGeneralEjercicio();
+            // Pasar los datos del producto a la vista de edición
+            request.setAttribute("listaEjercicios", listaEjercicios);
+            RequestDispatcher dispatcher = request.getRequestDispatcher("./Ejercicios/CrudEjercicios.jsp");
+            dispatcher.forward(request, response);
+       
+
+        } else {
+            // Redirige a la página de inicio de sesión o a donde desees
+            session.setAttribute("successMessage", "Categoria Eliminada Correctamente.");
+
+             List<Ejercicio> listaEjercicios = EjercicioDAO.consultaGeneralEjercicio();
+            // Pasar los datos del producto a la vista de edición
+            request.setAttribute("listaEjercicios", listaEjercicios);
+            RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
+            dispatcher.forward(request, response);
+        }
+    }
+    
+    
+    
     
      private void EliminarCategoria(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
