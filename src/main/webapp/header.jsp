@@ -5,7 +5,7 @@
 <html lang="en">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Tu Sitio Web</title>
+        <title>Gym</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
         <link href="Estilos/style.min.css" rel="stylesheet">
         <!-- Flaticon Font -->
@@ -23,7 +23,7 @@
                 </button>
                 <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                     <div class="navbar-nav ml-auto p-4 bg-secondary">
-                        <a href="#" class="nav-item nav-link active">Home</a>
+                        <a href="index.jsp" class="nav-item nav-link active">Home</a>
 
                         <c:choose>
                             <c:when test="${empty sessionScope.usuario}">
