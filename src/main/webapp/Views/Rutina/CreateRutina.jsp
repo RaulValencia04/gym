@@ -192,7 +192,7 @@
 
                                     <div class="mb-3">
                                         <label for="repeticiones" class="col-form-label">Cantidad de repeticiones:</label>
-                                        <input type="number" class="form-control" id="repeticiones" name="repeticiones">
+                                        <input type="number" min="1" class="form-control" id="repeticiones" name="repeticiones">
                                     </div>
                                     <button type="submit" class="btn btn-primary">Añadir</button>
                                 </form>

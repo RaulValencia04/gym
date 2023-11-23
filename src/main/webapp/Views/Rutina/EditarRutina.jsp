@@ -24,7 +24,7 @@
                 </div>
                 <div class="mb-3">
                     <label for="repeticionesEdit" class="col-form-label">Repeticiones:</label>
-                    <input type="number" class="form-control" id="repeticionesEdit" name="repeticionesRutina" value="${repeticiones}">
+                    <input type="number" min="1"class="form-control" id="repeticionesEdit" name="repeticionesRutina" value="${repeticiones}">
                 </div>
                 <input type="hidden" name="idRutina" value="${idRutina}">
                   
