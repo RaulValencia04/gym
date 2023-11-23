@@ -175,6 +175,29 @@ public class RutinaDAO {
             cerrarRecursos(con, statement, null);
         }
     }
+        public void actualizarRutinaNombre(int id, String nombre) throws SQLException {
+        Connection con = null;
+        PreparedStatement statement = null;
+
+        try {
+            Conexion conexionDB = new Conexion();
+            con = conexionDB.obtenerConexion();
+
+            // Consulta SQL para actualizar una rutina
+            String consultaSQL = "UPDATE Rutina SET nombre = ? WHERE id_rutina = ?";
+            statement = con.prepareStatement(consultaSQL);
+
+            // Establecer los parámetros de la consulta con los nuevos valores de la rutina
+            statement.setString(1, nombre);
+            statement.setInt(2, id);
+          
+            // Ejecutar la consulta
+            statement.executeUpdate();
+        } finally {
+            // Cerrar recursos
+            cerrarRecursos(con, statement, null);
+        }
+    }
 
     public int obtenerIdRutina() throws SQLException {
         Connection con = null;

@@ -1,5 +1,8 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@page import="java.util.Calendar"%>
+<%@page import="java.util.Date"%>
+<%@page import="java.text.SimpleDateFormat"%>
 <%--<jsp:include page="./../../header.jsp" />--%>
 
 <!DOCTYPE html>
@@ -27,27 +30,57 @@
                 font-family: Times New Roman, serif;
 
             }
-
+            .box{
+                display: flex
+            }
+            .center-cards {
+                justify-content: center;
+            }
 
         </style>
 
 
 
-        <div class="container mt-5">
-            <div class="row">
+        <div class="container mt-5 " >
+            <div class="row center-cards" >
                 <%-- Itera sobre los días de la semana --%>
-                <%
-                    String[] diasSemana = {"Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"};
-                    int posicion = 0;
 
-                    for (String dia : diasSemana) {
+                <%-- Obtener la fecha actual --%>
+                <% Date fechaActual = new Date(); %>
+
+                <%-- Crear una instancia de Calendar y establecer la fecha actual --%>
+                <% Calendar calendar = Calendar.getInstance(); %>
+                <% calendar.setTime(fechaActual); %>
+
+                <%-- Obtener el día de la semana (en formato numérico) --%>
+                <% int diaDeLaSemanaActual = calendar.get(Calendar.DAY_OF_WEEK); %>
+
+                <%-- Convertir el número del día de la semana a un nombre --%>
+                <% String nombreDiaActual = obtenerNombreDia(diaDeLaSemanaActual); %>
+
+                <%-- Método para obtener el nombre del día a partir del número del día de la semana --%>
+                <%!
+                    private String obtenerNombreDia(int diaDeLaSemana) {
+                        String[] diasSemana = {"Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"};
+                        return diasSemana[diaDeLaSemana - 1];
+                    }
                 %>
-                <div class="col-md-3 mb-3">
+
+                <%-- Itera sobre los días de la semana --%>
+                <% String[] diasSemana = {"Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"}; %>
+                <% int posicion = 0; %>
+                <% for (String dia : diasSemana) { %>
+                <%-- Obtener el día de la semana actual en el bucle --%>
+                <% int diaDeLaSemanaBucle = (posicion % 7) + 1; %>
+                <% String nombreDiaBucle = obtenerNombreDia(diaDeLaSemanaBucle); %>
+
+                <%-- Determinar si el día actual coincide con el día en el bucle --%>
+                <% boolean esDiaActual = nombreDiaActual.equals(dia);%>
+                <div class="col-md-3 mb-3 box">
                     <div class="card" style="border-radius: 20px; height: 160px">
                         <div class="card-body p-0" style="margin: 0px; height: 25px ">
-                            <h5 class="card-title" style=" display: grid;align-items:center; background-color: red; border-radius: 20px 20px 0px 0px; height: 35px">
+                            <h5 class="card-title" style=" display: grid;align-items:center; background-color: <%= esDiaActual ? "green" : "red"%>; border-radius: 20px 20px 0px 0px; height: 35px">
                                 <%= dia%>
-
                                 <div name="nombreR" id="nombreR"></div>
                             </h5>
 
@@ -62,12 +95,12 @@
                                     onclick="abrirModal('<%= dia%>')"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar-plus" viewBox="0 0 16 16">
                                 <path d="M8 7a.5.5 0 0 1 .5.5V9H10a.5.5 0 0 1 0 1H8.5v1.5a.5.5 0 0 1-1 0V10H6a.5.5 0 0 1 0-1h1.5V7.5A.5.5 0 0 1 8 7"/>
                                 <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z"/>
-                                </svg>
+                                </svg> Añadir Rutina
                             </button>
 
-                            <button type="button"  id="btnFiltrar" class="btn btn-success btnFiltrar m-2 mb-3 " data-dia="<%= dia %>" ><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar-week-fill" viewBox="0 0 16 16">
+                            <button type="button"  id="btnFiltrar" class="btn btn-success btnFiltrar m-2 mb-3 " data-dia="<%= dia%>" ><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar-week-fill" viewBox="0 0 16 16">
                                 <path d="M4 .5a.5.5 0 0 0-1 0V1H2a2 2 0 0 0-2 2v1h16V3a2 2 0 0 0-2-2h-1V.5a.5.5 0 0 0-1 0V1H4zM16 14V5H0v9a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2M9.5 7h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5m3 0h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5M2 10.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3.5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5"/>
-                                </svg>
+                                </svg> Ver Rutina 
                             </button>
                         </div>
                     </div>
@@ -148,27 +181,27 @@
                     </div>
                 </div>
                 <script>
-                  document.addEventListener('click', function (event) {
-    // Verifica si el clic proviene de un botón con la clase 'btnFiltrar'
-    if (event.target.classList.contains('btnFiltrar')) {
-        // Obtener el día del botón en el que se hizo clic
-        var selectedDay = event.target.getAttribute('data-dia');
+                    document.addEventListener('click', function (event) {
+                        // Verifica si el clic proviene de un botón con la clase 'btnFiltrar'
+                        if (event.target.classList.contains('btnFiltrar')) {
+                            // Obtener el día del botón en el que se hizo clic
+                            var selectedDay = event.target.getAttribute('data-dia');
 
-        // Ocultar todas las filas de la tabla
-        var tableRows = document.querySelectorAll('tbody tr');
-        tableRows.forEach(function (row) {
-            row.style.display = 'none';
-        });
+                            // Ocultar todas las filas de la tabla
+                            var tableRows = document.querySelectorAll('tbody tr');
+                            tableRows.forEach(function (row) {
+                                row.style.display = 'none';
+                            });
 
-        // Mostrar solo las filas correspondientes al día seleccionado
-        var selectedDayRows = document.querySelectorAll('tbody tr td.table-active');
-        selectedDayRows.forEach(function (cell) {
-            if (cell.innerText === selectedDay) {
-                cell.parentElement.style.display = '';
-            }
-        });
-    }
-});
+                            // Mostrar solo las filas correspondientes al día seleccionado
+                            var selectedDayRows = document.querySelectorAll('tbody tr td.table-active');
+                            selectedDayRows.forEach(function (cell) {
+                                if (cell.innerText === selectedDay) {
+                                    cell.parentElement.style.display = '';
+                                }
+                            });
+                        }
+                    });
 
                 </script>
 
@@ -190,13 +223,15 @@
                     <tbody id="tablaRutinas<%= posicion%>">
                         <c:forEach var="rut" items="${listarutina}">
                             <tr>
-                                <td>${rut.nombre}</td>
-                                <td class="table-active">${rut.dia}</td>
-                                <td class="table-active">${rut.nombreEjercicio}</td>
-                                <td class="table-active">${rut.repeticiones}</td>
+                                <td contenteditable="true">${rut.nombre}</td>
+                                <td contenteditable="false" class="table-active">${rut.dia}</td>
+                                <td contenteditable="false" class="table-active">${rut.nombreEjercicio}</td>
+                                <td contenteditable="true" class="table-active">${rut.repeticiones}</td>
                                 <td>
-                                    <!-- Botón para editar -->
-                                    <a href="EditarRutinaServlet?id=${rut.idRutina}" class="btn btn-primary btn-sm">Editar</a>
+
+                                    <a href="EditarRutinaController?id=${rut.idRutina}&nombre=${rut.nombre}&repeticiones=${rut.repeticiones}" class="btn btn-primary btn-sm">
+                                        Editar
+                                    </a>
 
                                     <!-- Botón para eliminar (usando un formulario para enviar una solicitud POST) -->
                                     <form action="EliminarRutinaServlet" method="post" style="display:inline;">
@@ -253,4 +288,4 @@
 </html>
 
 
-<!--codigo funciona----->
+<!--codigo funciona---<chido mas chido todavia-->
