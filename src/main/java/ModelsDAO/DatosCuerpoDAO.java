@@ -42,10 +42,9 @@ public class DatosCuerpoDAO {
         try {
             Conexion conexion = new Conexion();
             Connection con = conexion.obtenerConexion();
-            String query = "SELECT * FROM DatosCuerpo WHERE id_usuario = ?";
+            String query = "SELECT id_datos, sexo, edad, peso, altura, fecha, imc,id_usuario FROM DatosCuerpo WHERE id_usuario = ? ";
             try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
                 preparedStatement.setInt(1, idUsuario);
-
                 try (ResultSet resultSet = preparedStatement.executeQuery()) {
                     while (resultSet.next()) {
                         DatosCuerpo datosCuerpo = new DatosCuerpo();
@@ -57,7 +56,6 @@ public class DatosCuerpoDAO {
                         datosCuerpo.setFecha(resultSet.getDate("fecha"));
                         datosCuerpo.setImc(resultSet.getDouble("imc"));
                         datosCuerpo.setIdUsuario(resultSet.getInt("id_usuario"));
-
                         datosCuerpoList.add(datosCuerpo);
                     }
                 }
@@ -65,7 +63,9 @@ public class DatosCuerpoDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return datosCuerpoList;
     }
+    
+    
+     //id_datos, sexo, edad, peso, altura, fecha, fecha, imc
 }

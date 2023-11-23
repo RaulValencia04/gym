@@ -11,15 +11,31 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import com.google.gson.Gson;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-@WebServlet(name = "DatosController", urlPatterns = {"/DatosController"})
+@WebServlet(name = "DatosController", urlPatterns = {"/DatosController","/graficos"})
+
 public class DatosController extends HttpServlet {
+    
+    private DatosCuerpoDAO datosCuerpoDao;
+        @Override
+    public void init() throws ServletException {
+        super.init();
+        datosCuerpoDao = new DatosCuerpoDAO();
+    }
+
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -40,7 +56,26 @@ public class DatosController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher("./Views/DatosCuerpo/DatosCuerpo.jsp").forward(request, response);
+          String action = request.getServletPath();
+        switch (action) {  
+            case "/DatosController":
+                 request.getRequestDispatcher("./Views/DatosCuerpo/DatosCuerpo.jsp").forward(request, response);
+                break;
+            case "/graficos":
+              {
+                  try {
+                      graficos(request, response);
+                  } catch (SQLException ex) {
+                      Logger.getLogger(DatosController.class.getName()).log(Level.SEVERE, null, ex);
+                  }
+              }
+                break;
+
+            default:
+                // Lógica para otras rutas si es necesario
+                break;
+        }
+      // 
     }
 
 @Override
@@ -111,6 +146,53 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
         // Ajusta esto según tu lógica para calcular el IMC
         return peso / (altura * altura);
     }
+    
+    
+     private void graficos(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException, SQLException {
+    HttpSession session = request.getSession();
+
+    try {
+        String correo = (String) session.getAttribute("correo");
+
+        // Obtener el ID de usuario desde la base de datos usando el correo electrónico
+        int idUsuario = obtenerIdUsuarioPorCorreo(correo);
+        // Lógica para obtener los datos del producto desde la base de datos
+        List<DatosCuerpo> listaDatos = datosCuerpoDao.obtenerDatosPorUsuario(idUsuario);
+
+        if (listaDatos != null) {
+            // Ordenar la lista de DatosCuerpo (puedes cambiar el comparador según tus necesidades)
+            Collections.sort(listaDatos, new Comparator<DatosCuerpo>() {
+                @Override
+                public int compare(DatosCuerpo dato1, DatosCuerpo dato2) {
+                    // Aquí defines la lógica de comparación, por ejemplo, comparar por fecha
+                    return dato1.getFecha().compareTo(dato2.getFecha());
+                }
+            });
+
+            // Crear una instancia de Gson
+            Gson gson = new Gson();
+
+            // Convertir la lista de encuestas a JSON
+            String datosJSON = gson.toJson(listaDatos);
+
+            // Pasar los datos JSON a la vista
+            request.setAttribute("datosJSON", datosJSON);
+
+            RequestDispatcher dispatcher = request.getRequestDispatcher("./Views/DatosCuerpo/resumen.jsp");
+            dispatcher.forward(request, response);
+        } else {
+            session.setAttribute("errorMessage", "Llene antes su encuesta");
+            response.sendRedirect("clientes?error=true");
+        }
+
+    } catch (NumberFormatException e) {
+        // Manejo de error si el ID no es un número válido
+        session.setAttribute("errorMessage", "1Error al cargar editar producto");
+        response.sendRedirect("clientes?error=true");
+    }
+}
+
 
     private int obtenerIdUsuarioPorCorreo(String correo) throws SQLException {
         int idUsuario = -1;
