@@ -18,6 +18,7 @@ Models/Rutina.class
 Controller/EliminarRutinaServlet.class
 Models/DatosCuerpo.class
 Controller/LoginController.class
+Conexion/ConstruyeBD.class
 Controller/RutinaController.class
 com/mycompany/gym/JakartaRestConfiguration.class
 Models/DetalleRutina.class

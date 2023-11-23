@@ -9,22 +9,21 @@ import java.util.List;
 
 import Conexion.Conexion;
 import Models.Ejercicio;
+import java.util.HashSet;
 
 public class EjercicioDAO {
 
-
-   public static boolean insertarEjercicio(Ejercicio ejercicio) {
+    public static boolean insertarEjercicio(Ejercicio ejercicio) {
         Connection con = null;
         PreparedStatement statement = null;
         boolean exito = true;
 
-          
         try {
             Conexion conexionDB = new Conexion();
             con = conexionDB.obtenerConexion();
 
             // Consulta SQL para insertar una nueva categoría
-             String consultaSQL = "INSERT INTO ejercicios (nombre, imagen_url, descripcion, id_categoria) VALUES (?, ?, ?, ?)";
+            String consultaSQL = "INSERT INTO ejercicios (nombre, imagen_url, descripcion, id_categoria) VALUES (?, ?, ?, ?)";
             statement = con.prepareStatement(consultaSQL);
 
             // Establecer los parámetros de la consulta con los valores de la categoría
@@ -53,9 +52,8 @@ public class EjercicioDAO {
         }
 
         // Devolver true si no hubo problemas
-        return exito;   
+        return exito;
     }
-
 
     public List<Ejercicio> obtenerTodosLosEjercicios() throws SQLException {
         Connection con = null;
@@ -107,7 +105,7 @@ public class EjercicioDAO {
     }
 
     public static List<Ejercicio> obtenerEjerciciosPorCategoria(int idCategoriaSeleccionada) throws SQLException {
-         Connection con = null;
+        Connection con = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
 
@@ -120,7 +118,7 @@ public class EjercicioDAO {
             // Consulta SQL para obtener todos los ejercicios
             String consultaSQL = "SELECT * FROM ejercicios where id_categoria = ?";
             statement = con.prepareStatement(consultaSQL);
-             statement.setInt(1, idCategoriaSeleccionada);
+            statement.setInt(1, idCategoriaSeleccionada);
             resultSet = statement.executeQuery();
 
             // Procesar los resultados y crear objetos Ejercicio
@@ -154,10 +152,168 @@ public class EjercicioDAO {
         }
 
         return ejercicios;
-        
-        
+
     }
 
+    public static List<Ejercicio> consultaGeneralEjercicio() {
+        Connection con = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        List<Ejercicio> ejercicios = new ArrayList<>();
+
+        try {
+            Conexion conexionDB = new Conexion();
+            con = conexionDB.obtenerConexion();
+
+            // Consulta SQL para consultar todas las categorías
+            String consultaSQL = "SELECT * FROM ejercicios";
+
+            // Crear un objeto PreparedStatement
+            statement = con.prepareStatement(consultaSQL);
+
+            // Ejecutar la consulta
+            resultSet = statement.executeQuery();
+
+            // Iterar sobre los resultados de la consulta
+            while (resultSet.next()) {
+
+                // Crear una nueva categoría a partir de los resultados de la consulta
+                Ejercicio ejercicio = new Ejercicio();
+                ejercicio.setIdEjercicio(resultSet.getInt("id_ejercicio"));
+                ejercicio.setNombre(resultSet.getString("nombre"));
+                ejercicio.setImagenUrl(resultSet.getString("imagen_url"));
+                ejercicio.setDescripcion(resultSet.getString("descripcion"));
+                ejercicio.setIdCategoria(resultSet.getInt("id_categoria"));
+
+                // Añadir el ejercicio a la lista
+                ejercicios.add(ejercicio);
+            }
+        } catch (SQLException e) {
+
+            e.printStackTrace();
+
+        }
+        // Devolver la lista de ejercicios
+        return ejercicios;
+    }
+
+    public static Ejercicio consultaPorId(int idEjercicio) {
+        Connection con = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        Ejercicio ejercicio = null;
+        System.out.println("entro al metodo consultar");
+
+        try {
+            Conexion conexionDB = new Conexion();
+            con = conexionDB.obtenerConexion();
+
+            // Consulta SQL para consultar una categoría por su ID
+            String consultaSQL = "SELECT * FROM ejercicios WHERE id_ejercicio = ?";
+
+            // Crear un objeto PreparedStatement
+            statement = con.prepareStatement(consultaSQL);
+
+            // Establecer el parámetro ID en la consulta
+            statement.setInt(1, idEjercicio);
+
+            // Ejecutar la consulta
+            resultSet = statement.executeQuery();
+
+            // Verificar si se encontró la categoría
+            if (resultSet.next()) {
+                // Crear un objeto de categoría a partir de los resultados de la consulta
+                ejercicio = new Ejercicio();
+                ejercicio.setIdEjercicio(resultSet.getInt("id_ejercicio"));
+                ejercicio.setNombre(resultSet.getString("nombre"));
+                ejercicio.setImagenUrl(resultSet.getString("imagen_url"));
+                ejercicio.setDescripcion(resultSet.getString("descripcion"));
+                ejercicio.setIdCategoria(resultSet.getInt("id_categoria"));
+            }
+            System.out.println(ejercicio.getDescripcion()
+            );
+        } catch (SQLException e) {
+            System.out.println("paso algo");
+            e.printStackTrace();
+        } finally {
+            // Cerrar recursos (ResultSet, Statement, Connection) en un bloque finally
+            // para garantizar que se cierren correctamente incluso si ocurre una excepción.
+            if (resultSet != null) {
+                try {
+                    resultSet.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (con != null) {
+                try {
+                    con.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        // Devolver la categoría encontrada (o null si no se encuentra)
+        return ejercicio;
+    }
     
     
+        public static boolean eliminarEjercicio(int idEjercicio) {
+        Connection con = null;
+        PreparedStatement statement = null;
+
+        try {
+            Conexion conexionDB = new Conexion();
+            con = conexionDB.obtenerConexion();
+
+            // Consulta SQL para eliminar una categoría por su ID
+            String consultaSQL = "DELETE FROM ejercicios WHERE id_ejercicio = ?";
+
+            // Imprimir información de depuración
+            System.out.println("ID de la categoría a eliminar: " + idEjercicio);
+
+            // Crear un objeto PreparedStatement
+            statement = con.prepareStatement(consultaSQL);
+
+            // Establecer el parámetro ID en la consulta
+            statement.setInt(1, idEjercicio);
+
+            // Ejecutar la eliminación y devolver true si se eliminó al menos un registro
+            int filasEliminadas = statement.executeUpdate();
+
+            // Imprimir información de depuración
+            System.out.println("Filas eliminadas: " + filasEliminadas);
+
+            return filasEliminadas > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false; // Devolver false en caso de error
+        } finally {
+            // Cerrar recursos (Statement, Connection) en un bloque finally
+            // para garantizar que se cierren correctamente incluso si ocurre una excepción.
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (con != null) {
+                try {
+                    con.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
 }
