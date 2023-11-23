@@ -3,7 +3,8 @@
 <%@page import="java.util.Calendar"%>
 <%@page import="java.util.Date"%>
 <%@page import="java.text.SimpleDateFormat"%>
-<%--<jsp:include page="./../../header.jsp" />--%>
+<jsp:include page="./../../header.jsp" />
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -15,9 +16,12 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
               rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
               crossorigin="anonymous">
+        <!--<link href="Estilos/style.min.css" rel="stylesheet">-->
     </head>
-    <body>
-
+    <body class="mt-5" >
+        <div style="height: 100px">
+            
+        </div>
         <style>
             .card-title{
                 color: white;
@@ -41,7 +45,7 @@
 
 
 
-        <div class="container mt-5 " >
+        <div class="container mt-5 "style="margin-top: 1000px" >
             <div class="row center-cards" >
                 <%-- Itera sobre los días de la semana --%>
 
@@ -77,7 +81,7 @@
                 <%-- Determinar si el día actual coincide con el día en el bucle --%>
                 <% boolean esDiaActual = nombreDiaActual.equals(dia);%>
                 <div class="col-md-3 mb-3 box">
-                    <div class="card" style="border-radius: 20px; height: 160px">
+                    <div class="card" style="border-radius: 20px; height: 160px; width: 200px">
                         <div class="card-body p-0" style="margin: 0px; height: 25px ">
                             <h5 class="card-title" style=" display: grid;align-items:center; background-color: <%= esDiaActual ? "green" : "red"%>; border-radius: 20px 20px 0px 0px; height: 35px">
                                 <%= dia%>
@@ -90,17 +94,17 @@
                             </div>
 
 
-                            <button type="button" class="btn btn-primary  m-2 mb-3 " data-bs-toggle="modal"
-                                    data-bs-target="#exampleModal" data-bs-whatever="@mdo"
+                            <button type="button" class="btn btn-primary  ml-2 mb-3 " data-bs-toggle="modal"
+                                    data-bs-target="#exampleModal" data-bs-whatever="@mdo" 
                                     onclick="abrirModal('<%= dia%>')"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar-plus" viewBox="0 0 16 16">
                                 <path d="M8 7a.5.5 0 0 1 .5.5V9H10a.5.5 0 0 1 0 1H8.5v1.5a.5.5 0 0 1-1 0V10H6a.5.5 0 0 1 0-1h1.5V7.5A.5.5 0 0 1 8 7"/>
                                 <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z"/>
-                                </svg> Añadir Rutina
+                                </svg> Añadir
                             </button>
 
-                            <button type="button"  id="btnFiltrar" class="btn btn-success btnFiltrar m-2 mb-3 " data-dia="<%= dia%>" ><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar-week-fill" viewBox="0 0 16 16">
+                            <button type="button"  id="btnFiltrar" class="btn btn-success btnFiltrar ml-2 mb-3 "   ><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar-week-fill" viewBox="0 0 16 16">
                                 <path d="M4 .5a.5.5 0 0 0-1 0V1H2a2 2 0 0 0-2 2v1h16V3a2 2 0 0 0-2-2h-1V.5a.5.5 0 0 0-1 0V1H4zM16 14V5H0v9a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2M9.5 7h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5m3 0h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5M2 10.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3.5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5"/>
-                                </svg> Ver Rutina 
+                                </svg> Ver 
                             </button>
                         </div>
                     </div>
