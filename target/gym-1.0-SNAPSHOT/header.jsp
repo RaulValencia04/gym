@@ -6,6 +6,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Gym</title>
+         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.18.0/font/bootstrap-icons.css" rel="stylesheet">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
         <link href="Estilos/style.min.css" rel="stylesheet">
         <!-- Flaticon Font -->
@@ -38,21 +39,25 @@
                                         <a class="nav-link" aria-current="page" href="RutinaController">Mi Rutina</a>
                                         <a class="nav-link" aria-current="page" href="DatosController" id="datos">Datos Cuerpo</a>
                                         <a class="nav-link" aria-current="page" href="VerCategoria">Aprender GYM</a>
-                                        <a class="btn btn-outline nav-item nav-link" href="LogoutController" id="login-link3"><i class="bi bi-person-add"></i> Salir</a>
+                                        <a class="btn btn-outline nav-item nav-link" href="LogoutController" id="login-link3">
+                                            <i class="bi bi-box-arrow-right"></i> <!-- Icono de cerrar sesión -->
+                                            Cerrar Sesión
+                                        </a>
                                     </c:when>
                                     <c:when test="${sessionScope.usuario.roll eq 0}">
-                                        <!-- Rol 1 (Administrador) -->
-                                        <!--                                    <a class="nav-link" aria-current="page" href="/categorias">Ejercicios</a>-->
-                                        <!--                                    <a class="nav-link" aria-current="page" href="DatosController" id="datos">Datos Cuerpo</a>
-                                                                            <a class="nav-link" aria-current="page" href="VerCategoria">Aprender GYM</a>-->
+                                        <!-- Rol 1 (Administrador) --> 
                                         <a class="nav-link" aria-current="page" href="MostrarFormCategoria">Agregar Categorías</a>
                                         <a class="nav-link" aria-current="page" href="MostrarFormEjercicio">Agregar Ejercicios</a>
                                         <a class="nav-link" aria-current="page" href="CrudEjercicios">Ver Ejercicios</a>
                                         <a class="nav-link" aria-current="page" href="CrudCategorias">Ver Categorias</a>
 
-                                        <form class="d-flex" role="search">
-                                            <a class="btn btn-outline nav-item nav-link" href="LogoutController" id="login-link3"><i class="bi bi-person-add"></i> Salir</a>
+                                       <form class="d-flex" role="search">
+                                            <a class="btn btn-outline-danger nav-item nav-link" href="LogoutController" id="login-link3" style="color: white;">
+                                                <i class="bi bi-box-arrow-right"></i> <!-- Icono de cerrar sesión -->
+                                                Cerrar Sesión
+                                            </a>
                                         </form>
+
                                     </c:when>
                                 </c:choose>
                             </c:otherwise>
@@ -62,29 +67,5 @@
             </nav>
         </div>
 
-        <script>
-            var loginLink = document.getElementById("login-link");
-            var loginLink2 = document.getElementById("login-link2");
-            var logoutLink = document.getElementById("logout-link");
-
-            if (<%= session.getAttribute("usuario") == null%>) {
-                logoutLink.style.display = "none";
-            } else {
-                loginLink.style.display = "none";
-                loginLink2.style.display = "none";
-            }
-
-            var idRol = ${sessionScope.usuario.roll};
-            console.log(idRol);
-
-            var ejer = document.getElementById("newejercicios");
-            var datos = document.getElementById("datos");
-
-            // datos.style.display = "block";  // Este bloque se encuentra comentado ya que no se está utilizando.
-
-            if (idRol === 1) {
-                // newejercicios.style.display = "block";  // Este bloque se encuentra comentado ya que no se está utilizando.
-            }
-        </script>
     </body>
 </html>
