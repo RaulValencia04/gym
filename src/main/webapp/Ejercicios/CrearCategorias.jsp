@@ -39,10 +39,10 @@
                                         <a class="nav-link" aria-current="page" href="RutinaController">Mi Rutina</a>
                                         <a class="nav-link" aria-current="page" href="DatosController" id="datos">Datos Cuerpo</a>
                                         <a class="nav-link" aria-current="page" href="VerCategoria">Aprender GYM</a>
-                                        <a class="btn btn-outline nav-item nav-link" href="LogoutController" id="login-link3">
-                                            <i class="bi bi-box-arrow-right"></i> <!-- Icono de cerrar sesión -->
-                                            Cerrar Sesión
-                                        </a>
+                                      <a class="btn btn-outline-danger nav-item nav-link" href="LogoutController" id="login-link3" style="color: white;">
+                                                <i class="bi bi-box-arrow-right"></i> <!-- Icono de cerrar sesión -->
+                                                Cerrar Sesión
+                                            </a>
                                     </c:when>
                                     <c:when test="${sessionScope.usuario.roll eq 0}">
                                         <!-- Rol 1 (Administrador) --> 
