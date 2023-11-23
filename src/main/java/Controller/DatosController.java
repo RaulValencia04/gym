@@ -117,7 +117,7 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
         datosCuerpoDAO.insertarDatosCuerpo(datosCuerpo);
 
         // Redirigir a la vista DatosCuerpo.jsp
-        response.sendRedirect("./Views/DatosCuerpo/DatosCuerpo.jsp");
+        response.sendRedirect("graficos");
     } catch (Exception e) {
         e.printStackTrace();
         // Manejar errores, redirigir a una página de error, etc.

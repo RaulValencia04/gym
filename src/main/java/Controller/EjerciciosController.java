@@ -30,7 +30,7 @@ import ModelsDAO.EjercicioDAO;
  *
  * @author Esau
  */
-@WebServlet(name = "EjerciciosController", urlPatterns = {"/MostrarFormCategoria", "/GuardarCategoria", "/MostrarFormEjercicio", "/GuardarEjercicio", "/VerEjercicio", "/VerCategoria", "/CrudCategorias", "/CrudEjercicios", "/EditarCategoria", "/EliminarCategoria", "/GuardarCategoriaEditada","/EditarEjercicio"})
+@WebServlet(name = "EjerciciosController", urlPatterns = {"/EliminarEjercicio","/MostrarFormCategoria", "/GuardarCategoria", "/MostrarFormEjercicio", "/GuardarEjercicio", "/VerEjercicio", "/VerCategoria", "/CrudCategorias", "/CrudEjercicios", "/EditarCategoria", "/EliminarCategoria", "/GuardarCategoriaEditada","/EditarEjercicio", "/GuardarEjercicioEditado"})
 public class EjerciciosController extends HttpServlet {
 
     private EjercicioDAO ejercicioDAO;
@@ -72,6 +72,9 @@ public class EjerciciosController extends HttpServlet {
             case "/EliminarCategoria":
                 EliminarCategoria(request, response);
                 break;
+            case "/EliminarEjercicio":
+                EliminarEjercicio(request, response);
+                break;
             case "/EditarEjercicio":
                 EditarEjercicio(request, response);
                 break;
@@ -104,7 +107,9 @@ public class EjerciciosController extends HttpServlet {
             case "/GuardarCategoriaEditada":
                 GuardarCategoriaEditada(request, response);
                 break;
-
+            case "/GuardarEjercicioEditado":
+               // GuardarEjercicioEditado(request, response);
+                break;
             default:
                 // Lógica para otras rutas si es necesario
                 break;
@@ -369,13 +374,45 @@ public class EjerciciosController extends HttpServlet {
 
         Ejercicio listaEjercicios = EjercicioDAO.consultaPorId(idEjercicio);
         
+          System.out.println("esteeeee"+listaEjercicios.getDescripcion());
+          
+           List<Categoria> listaCategorias = CategoriaDAO.consultaGeneral();
+            // Pasar los datos del producto a la vista de edición
+          
+        
         if (listaEjercicios != null) {
             // Pasar los datos del producto a la vista de edición
+              request.setAttribute("listaCategorias", listaCategorias);
             request.setAttribute("listaEjercicios", listaEjercicios);
             RequestDispatcher dispatcher = request.getRequestDispatcher("./Ejercicios/EditarEjercicio.jsp");
             dispatcher.forward(request, response);
         }
 
     }
+      
+           private void EliminarEjercicio(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        HttpSession session = request.getSession(false);
+
+        String idEjerciciotr = request.getParameter("id");
+
+        int idEjercicio = Integer.parseInt(idEjerciciotr);
+
+
+        boolean exito = EjercicioDAO.eliminarEjercicio(idEjercicio);
+
+        if (exito) {
+             // Redirige a la página de inicio de sesión o a donde desees
+            session.setAttribute("successMessage", "Categoria Eliminada Correctamente.");
+
+             List<Ejercicio> listaEjercicios = EjercicioDAO.consultaGeneralEjercicio();
+            // Pasar los datos del producto a la vista de edición
+            request.setAttribute("listaEjercicios", listaEjercicios);
+            RequestDispatcher dispatcher = request.getRequestDispatcher("./Ejercicios/CrudEjercicios.jsp");
+            dispatcher.forward(request, response);
+        }
+
+    }
+    
 
 }
