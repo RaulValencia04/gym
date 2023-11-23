@@ -15,7 +15,7 @@
         <link href="lib/flaticon/font/flaticon.css" rel="stylesheet">
     </head>
 
-    <body>
+    <body style="background-image: url('img/resumen.jpg'); padding-bottom: 20px" >
         <div class="container-fluid p-0 nav-bar">
             <nav class="navbar navbar-expand-lg bg-none navbar-dark py-3">
                 <a href="" class="navbar-brand">
@@ -71,8 +71,8 @@
         </div>
 
    
-     <div style="width:80%;">
-        <canvas id="imcGraphic"></canvas>
+     <div style="width: 80%; padding-top: 160px;" class="mx-auto">
+        <canvas id="imcGraphic" style="background-color: antiquewhite; opacity: 0.9;"></canvas>
     </div>
 
 </body>
