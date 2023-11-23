@@ -3,8 +3,7 @@
 <%@page import="java.util.Calendar"%>
 <%@page import="java.util.Date"%>
 <%@page import="java.text.SimpleDateFormat"%>
-<jsp:include page="./../../header.jsp" />
-
+<%--<jsp:include page="./../../header.jsp" />--%>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -16,12 +15,26 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
               rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
               crossorigin="anonymous">
-        <!--<link href="Estilos/style.min.css" rel="stylesheet">-->
+
+        <!-- Agregar los estilos de Bootstrap (asegúrate de que las rutas sean correctas) -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+              integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+
+        <!-- Agrega las bibliotecas de DataTables y su traducción al español -->
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+        <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+        <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/plug-ins/1.11.5/i18n/Spanish.json"></script>
+
+        <!-- Otros encabezados de tu página, como título, estilos, etc. -->
+
+        <!-- DataTables -->
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.11.3/datatables.min.css" />
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+        <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.11.3/datatables.min.js"></script>
     </head>
-    <body class="mt-5" >
-        <div style="height: 100px">
-            
-        </div>
+    <body  style="background-image: url('img/fondo1.jpg');padding-bottom: 20px" >
+
+
         <style>
             .card-title{
                 color: white;
@@ -45,7 +58,9 @@
 
 
 
-        <div class="container mt-5 "style="margin-top: 1000px" >
+
+        <div class="container mt-5 " >
+            <h1 class="" style="padding-top: 30px; padding-bottom: 30px; background-color: rgba(0, 0, 0, 0.7); color: #f5f5f5; font-size: 50px; text-align: center;">Hacer mi rutina</h1>
             <div class="row center-cards" >
                 <%-- Itera sobre los días de la semana --%>
 
@@ -80,31 +95,34 @@
 
                 <%-- Determinar si el día actual coincide con el día en el bucle --%>
                 <% boolean esDiaActual = nombreDiaActual.equals(dia);%>
+                <style>
+                    .box:hover {
+                        /* Add your desired styles for hover state */
+                        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                        transform: scale(1.05);
+                    }
+                </style>
+
                 <div class="col-md-3 mb-3 box">
-                    <div class="card" style="border-radius: 20px; height: 160px; width: 200px">
-                        <div class="card-body p-0" style="margin: 0px; height: 25px ">
-                            <h5 class="card-title" style=" display: grid;align-items:center; background-color: <%= esDiaActual ? "green" : "red"%>; border-radius: 20px 20px 0px 0px; height: 35px">
+                    <div class="card" style="border-radius: 20px; height: 160px">
+                        <div class="card-body p-0" style="margin: 0px; height: 25px">
+                            <h5 class="card-title" style="display: grid; align-items:center; background-color: <%= esDiaActual ? "green" : "red"%>; border-radius: 20px 20px 0px 0px; height: 35px">
                                 <%= dia%>
                                 <div name="nombreR" id="nombreR"></div>
                             </h5>
-
                             <div class="numero mt-2">
                                 <%posicion++;%>
                                 <%=posicion%>
                             </div>
-
-
-                            <button type="button" class="btn btn-primary  ml-2 mb-3 " data-bs-toggle="modal"
-                                    data-bs-target="#exampleModal" data-bs-whatever="@mdo" 
-                                    onclick="abrirModal('<%= dia%>')"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar-plus" viewBox="0 0 16 16">
-                                <path d="M8 7a.5.5 0 0 1 .5.5V9H10a.5.5 0 0 1 0 1H8.5v1.5a.5.5 0 0 1-1 0V10H6a.5.5 0 0 1 0-1h1.5V7.5A.5.5 0 0 1 8 7"/>
-                                <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z"/>
-                                </svg> Añadir
+                            <button type="button" class="btn btn-primary m-2 mb-3 " data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo" onclick="abrirModal('<%= dia%>')">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar-plus" viewBox="0 0 16 16">
+                                <!-- SVG path -->
+                                </svg> Añadir Rutina
                             </button>
-
-                            <button type="button"  id="btnFiltrar" class="btn btn-success btnFiltrar ml-2 mb-3 "   ><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar-week-fill" viewBox="0 0 16 16">
-                                <path d="M4 .5a.5.5 0 0 0-1 0V1H2a2 2 0 0 0-2 2v1h16V3a2 2 0 0 0-2-2h-1V.5a.5.5 0 0 0-1 0V1H4zM16 14V5H0v9a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2M9.5 7h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5m3 0h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5M2 10.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3.5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5"/>
-                                </svg> Ver 
+                            <button type="button" id="btnFiltrar" class="btn btn-success btnFiltrar m-2 mb-3 " data-dia="<%= dia%>">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar-week-fill" viewBox="0 0 16 16">
+                                <!-- SVG path -->
+                                </svg> Ver Rutina 
                             </button>
                         </div>
                     </div>
@@ -212,83 +230,95 @@
 
                 <% }%>
             </div>
+
+            <h1 class="" style="padding-top: 30px; padding-bottom: 30px; background-color: rgba(0, 0, 0, 0.8); color: #f5f5f5; font-size: 50px; text-align: center;">Mi rutina</h1>
             <div class="col-md-12 mt-3">
-                <h2>Rutinas</h2>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Nombre</th>
-                            <th>Dia</th>
-                            <th>Ejercicio</th>
-                            <th>Repeticiones</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tablaRutinas<%= posicion%>">
-                        <c:forEach var="rut" items="${listarutina}">
-                            <tr>
-                                <td contenteditable="true">${rut.nombre}</td>
-                                <td contenteditable="false" class="table-active">${rut.dia}</td>
-                                <td contenteditable="false" class="table-active">${rut.nombreEjercicio}</td>
-                                <td contenteditable="true" class="table-active">${rut.repeticiones}</td>
-                                <td>
-
-                                    <a href="EditarRutinaController?id=${rut.idRutina}&nombre=${rut.nombre}&repeticiones=${rut.repeticiones}" class="btn btn-primary btn-sm">
-                                        Editar
-                                    </a>
-
-                                    <!-- Botón para eliminar (usando un formulario para enviar una solicitud POST) -->
-                                    <form action="EliminarRutinaServlet" method="post" style="display:inline;">
-                                        <input type="hidden" name="idRutina" value="${rut.idRutina}">
-                                        <button type="submit" class="btn btn-danger btn-sm"
-                                                onclick="return confirm('¿Estás seguro de que deseas eliminar esta rutina?')">Eliminar
-                                        </button>
-                                    </form>
-                                </td>
-                            </tr>
-                        </c:forEach>
-                    </tbody>
-                </table>
+                <div class="card" style="opacity: 0.9;">
+                    <div class="card-body table-container" style="opacity: 0.9;">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Dia</th>
+                                    <th>Ejercicio</th>
+                                    <th>Repeticiones</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tablaRutinas<%= posicion%>">
+                                <c:forEach var="rut" items="${listarutina}">
+                                    <tr>
+                                        <td contenteditable="true">${rut.nombre}</td>
+                                        <td contenteditable="false" class="table-active">${rut.dia}</td>
+                                        <td contenteditable="false" class="table-active">${rut.nombreEjercicio}</td>
+                                        <td contenteditable="true" class="table-active">${rut.repeticiones}</td>
+                                        <td>
+                                            <a href="EditarRutinaController?id=${rut.idRutina}&nombre=${rut.nombre}&repeticiones=${rut.repeticiones}" class="btn btn-primary btn-sm">
+                                                Editar
+                                            </a>
+                                            <!-- Botón para eliminar (usando un formulario para enviar una solicitud POST) -->
+                                            <form action="EliminarRutinaServlet" method="post" style="display:inline;">
+                                                <input type="hidden" name="idRutina" value="${rut.idRutina}">
+                                                <button type="submit" class="btn btn-danger btn-sm"
+                                                        onclick="return confirm('¿Estás seguro de que deseas eliminar esta rutina?')">Eliminar
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                </c:forEach>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
+
+
 
             <!-- Botón para guardar la rutina -->
             <div class="row mt-3">
-                <div class="col-md-12">
-                    <button type="button" class="btn btn-success">Guardar Rutina</button>
+                <div class="col-md-12 text-center">
+                    <button type="button" class="btn btn-success btn-lg">Guardar Rutina en Reporte</button>
                 </div>
             </div>
+
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
                 integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
         crossorigin="anonymous"></script>
         <script src="https://code.jquery.com/jquery-3.6.4.min.js"
         integrity="sha256-oP6HI/tT1h1eeN/U9gIxpCUFMw+uVoF6A5eTqrs9iE=" crossorigin="anonymous"></script>
-
         <script>
-                                                    function abrirModal(dia) {
-                                                        // Actualiza el campo de entrada con el día y la rutina seleccionados
-                                                        var modal = document.getElementById('exampleModal');
-                                                        var inputDia = modal.querySelector('#recipient-name');
-                                                        var inputRutina = modal.querySelector('#recipient-name2');
-
-                                                        inputDia.value = dia;
-
-                                                        // Abre el modal
-                                                        var myModal = new bootstrap.Modal(modal);
-                                                        myModal.show();
-                                                    }
-
-
-
+                                                            $(document).ready(function () {
+                                                                // Inicializa la tabla como un DataTable
+                                                                $('.table').DataTable();
+                                                            });
         </script>
-        <script>
-            // Función para verificar si un elemento contiene un texto
-            jQuery.expr[':'].contains = function (a, i, m) {
-                return jQuery(a).text().toUpperCase().indexOf(m[3].toUpperCase()) >= 0;
-            };
-        </script>
+    </script>
 
-    </body>
+
+    <script>
+        function abrirModal(dia) {
+            // Actualiza el campo de entrada con el día y la rutina seleccionados
+            var modal = document.getElementById('exampleModal');
+            var inputDia = modal.querySelector('#recipient-name');
+            var inputRutina = modal.querySelector('#recipient-name2');
+
+            inputDia.value = dia;
+
+            // Abre el modal
+            var myModal = new bootstrap.Modal(modal);
+            myModal.show();
+        }
+    </script>
+
+    <script>
+        // Función para verificar si un elemento contiene un texto
+        jQuery.expr[':'].contains = function (a, i, m) {
+            return jQuery(a).text().toUpperCase().indexOf(m[3].toUpperCase()) >= 0;
+        };
+    </script>
+
+</body>
 </html>
 
 

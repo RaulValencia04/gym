@@ -40,12 +40,14 @@ public class DatosCuerpoDAO {
         List<DatosCuerpo> datosCuerpoList = new ArrayList<>();
 
         try {
+            System.out.println("entra1");
             Conexion conexion = new Conexion();
             Connection con = conexion.obtenerConexion();
-            String query = "SELECT * FROM DatosCuerpo WHERE id_usuario = ?";
+            System.out.println("entra2");
+            String query = "SELECT id_datos, sexo, edad, peso, altura, fecha, imc,id_usuario FROM DatosCuerpo WHERE id_usuario = ? order by fecha";
             try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
                 preparedStatement.setInt(1, idUsuario);
-
+                System.out.println("entra3");
                 try (ResultSet resultSet = preparedStatement.executeQuery()) {
                     while (resultSet.next()) {
                         DatosCuerpo datosCuerpo = new DatosCuerpo();
@@ -65,7 +67,11 @@ public class DatosCuerpoDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
+        System.out.println("entra metodo");
+        System.out.println(datosCuerpoList);
         return datosCuerpoList;
     }
+    
+    
+     //id_datos, sexo, edad, peso, altura, fecha, fecha, imc
 }

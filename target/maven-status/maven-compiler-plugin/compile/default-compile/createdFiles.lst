@@ -21,4 +21,5 @@ com/mycompany/gym/JakartaRestConfiguration.class
 Models/DetalleRutina.class
 Controller/LogoutController.class
 ModelsDAO/EjercicioDAO.class
+Controller/DatosController$1.class
 ModelsDAO/RutinaDAO.class
