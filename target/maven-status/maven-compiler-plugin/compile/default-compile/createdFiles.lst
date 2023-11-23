@@ -18,6 +18,7 @@ Controller\RutinaController.class
 ModelsDAO\EjercicioDAO.class
 ModelsDAO\RutinaDAO.class
 Controller\DatosController$1.class
+Conexion\ConstruyeBD.class
 Models\Categoria.class
 Controller\EliminarRutinaServlet.class
 Controller\LoginController.class

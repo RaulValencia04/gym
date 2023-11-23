@@ -1,6 +1,12 @@
 <%@page import="Models.Usuario"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <jsp:include page="header.jsp" />
+<%@ page import="Conexion.ConstruyeBD" %>
+<%
+    // Llama a la función de inicialización al cargar la página
+    ConstruyeBD bd = new ConstruyeBD();
+    bd.obtenerConexion();
+%>
 <head>
     <title>Encuesta</title>
 
