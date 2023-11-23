@@ -116,7 +116,7 @@
                                                 <td>${ejercicio.idCategoria}</td>
                                                 <td>
                                                     <a href="EditarEjercicio?id=${ejercicio.idEjercicio}" class="btn btn-warning">Editar</a>
-                                                    <a href="EliminarCategoria?id=${ejercicio.idEjercicio}" class="btn btn-danger">Eliminar</a>
+                                                    <a href="EliminarEjercicio?id=${ejercicio.idEjercicio}" class="btn btn-danger">Eliminar</a>
                                                 </td>
                                             </tr>
                                         </c:forEach>

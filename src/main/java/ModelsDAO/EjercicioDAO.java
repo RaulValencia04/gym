@@ -230,7 +230,8 @@ public class EjercicioDAO {
                 ejercicio.setDescripcion(resultSet.getString("descripcion"));
                 ejercicio.setIdCategoria(resultSet.getInt("id_categoria"));
             }
-            System.out.println(ejercicio.getDescripcion());
+            System.out.println(ejercicio.getDescripcion()
+            );
         } catch (SQLException e) {
             System.out.println("paso algo");
             e.printStackTrace();
@@ -265,4 +266,54 @@ public class EjercicioDAO {
     }
     
     
+        public static boolean eliminarEjercicio(int idEjercicio) {
+        Connection con = null;
+        PreparedStatement statement = null;
+
+        try {
+            Conexion conexionDB = new Conexion();
+            con = conexionDB.obtenerConexion();
+
+            // Consulta SQL para eliminar una categoría por su ID
+            String consultaSQL = "DELETE FROM ejercicios WHERE id_ejercicio = ?";
+
+            // Imprimir información de depuración
+            System.out.println("ID de la categoría a eliminar: " + idEjercicio);
+
+            // Crear un objeto PreparedStatement
+            statement = con.prepareStatement(consultaSQL);
+
+            // Establecer el parámetro ID en la consulta
+            statement.setInt(1, idEjercicio);
+
+            // Ejecutar la eliminación y devolver true si se eliminó al menos un registro
+            int filasEliminadas = statement.executeUpdate();
+
+            // Imprimir información de depuración
+            System.out.println("Filas eliminadas: " + filasEliminadas);
+
+            return filasEliminadas > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false; // Devolver false en caso de error
+        } finally {
+            // Cerrar recursos (Statement, Connection) en un bloque finally
+            // para garantizar que se cierren correctamente incluso si ocurre una excepción.
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (con != null) {
+                try {
+                    con.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
 }
