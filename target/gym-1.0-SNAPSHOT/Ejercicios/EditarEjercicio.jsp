@@ -27,12 +27,12 @@
       
       <div class="form-group">
         <label for="urlImagen">URL de la Imagen:</label>
-        <input type="url" class="form-control" id="urlImagen" name="urlImagen" value="${listaEjercicios.getNombre()}" required>
+        <input type="url" class="form-control" id="urlImagen" name="urlImagen" value="${listaEjercicios.getImagenUrl()}" required>
       </div>
 
       <div class="form-group">
         <label for="descripcion">Descripción:</label>
-        <textarea class="form-control" id="descripcion" name="descripcion" rows="3" value="${listaEjercicios.getNombre()}" required></textarea>
+        <textarea class="form-control" id="descripcion" name="descripcion" rows="3" value="${listaEjercicios.getDescripcion()}" required></textarea>
       </div>
 
       <div class="form-group">

@@ -230,7 +230,7 @@ public class EjercicioDAO {
                 ejercicio.setDescripcion(resultSet.getString("descripcion"));
                 ejercicio.setIdCategoria(resultSet.getInt("id_categoria"));
             }
-
+            System.out.println(ejercicio.getDescripcion());
         } catch (SQLException e) {
             System.out.println("paso algo");
             e.printStackTrace();
