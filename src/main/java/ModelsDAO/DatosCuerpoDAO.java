@@ -40,14 +40,11 @@ public class DatosCuerpoDAO {
         List<DatosCuerpo> datosCuerpoList = new ArrayList<>();
 
         try {
-            System.out.println("entra1");
             Conexion conexion = new Conexion();
             Connection con = conexion.obtenerConexion();
-            System.out.println("entra2");
-            String query = "SELECT id_datos, sexo, edad, peso, altura, fecha, imc,id_usuario FROM DatosCuerpo WHERE id_usuario = ? order by fecha";
+            String query = "SELECT id_datos, sexo, edad, peso, altura, fecha, imc,id_usuario FROM DatosCuerpo WHERE id_usuario = ? ";
             try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
                 preparedStatement.setInt(1, idUsuario);
-                System.out.println("entra3");
                 try (ResultSet resultSet = preparedStatement.executeQuery()) {
                     while (resultSet.next()) {
                         DatosCuerpo datosCuerpo = new DatosCuerpo();
@@ -59,7 +56,6 @@ public class DatosCuerpoDAO {
                         datosCuerpo.setFecha(resultSet.getDate("fecha"));
                         datosCuerpo.setImc(resultSet.getDouble("imc"));
                         datosCuerpo.setIdUsuario(resultSet.getInt("id_usuario"));
-
                         datosCuerpoList.add(datosCuerpo);
                     }
                 }
@@ -67,8 +63,6 @@ public class DatosCuerpoDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        System.out.println("entra metodo");
-        System.out.println(datosCuerpoList);
         return datosCuerpoList;
     }
     

@@ -39,6 +39,7 @@
                                         <a class="nav-link" aria-current="page" href="RutinaController">Mi Rutina</a>
                                         <a class="nav-link" aria-current="page" href="DatosController" id="datos">Datos Cuerpo</a>
                                         <a class="nav-link" aria-current="page" href="VerCategoria">Aprender GYM</a>
+                                        <a class="nav-link" aria-current="page" href="graficos">Mostrar resumen</a>
                                         <a class="btn btn-outline-danger nav-item nav-link" href="LogoutController" id="login-link3" style="color: white;">
                                                 <i class="bi bi-box-arrow-right"></i> <!-- Icono de cerrar sesión -->
                                                 Cerrar Sesión

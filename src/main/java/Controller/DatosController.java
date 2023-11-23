@@ -62,8 +62,15 @@ public class DatosController extends HttpServlet {
                  request.getRequestDispatcher("./Views/DatosCuerpo/DatosCuerpo.jsp").forward(request, response);
                 break;
             case "/graficos":
-                graficos(request, response);
+              {
+                  try {
+                      graficos(request, response);
+                  } catch (SQLException ex) {
+                      Logger.getLogger(DatosController.class.getName()).log(Level.SEVERE, null, ex);
+                  }
+              }
                 break;
+
             default:
                 // Lógica para otras rutas si es necesario
                 break;
@@ -142,13 +149,16 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
     
     
      private void graficos(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
+        throws ServletException, IOException, SQLException {
     HttpSession session = request.getSession();
 
     try {
+        String correo = (String) session.getAttribute("correo");
+
+        // Obtener el ID de usuario desde la base de datos usando el correo electrónico
+        int idUsuario = obtenerIdUsuarioPorCorreo(correo);
         // Lógica para obtener los datos del producto desde la base de datos
-        System.out.println("entra");
-        List<DatosCuerpo> listaDatos = datosCuerpoDao.obtenerDatosPorUsuario(1);
+        List<DatosCuerpo> listaDatos = datosCuerpoDao.obtenerDatosPorUsuario(idUsuario);
 
         if (listaDatos != null) {
             // Ordenar la lista de DatosCuerpo (puedes cambiar el comparador según tus necesidades)
@@ -165,8 +175,6 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
 
             // Convertir la lista de encuestas a JSON
             String datosJSON = gson.toJson(listaDatos);
-            System.out.println("datos json");
-            System.out.println(datosJSON);
 
             // Pasar los datos JSON a la vista
             request.setAttribute("datosJSON", datosJSON);
