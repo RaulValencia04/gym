@@ -69,9 +69,52 @@ public class DetalleRutinaDAO {
 
         return detallesRutina;
     }
+            public void actualizarDetalleRepe(int id, int repe) throws SQLException {
+        Connection con = null;
+        PreparedStatement statement = null;
+
+        try {
+            Conexion conexionDB = new Conexion();
+            con = conexionDB.obtenerConexion();
+
+            // Consulta SQL para actualizar una rutina
+            String consultaSQL = "UPDATE DetalleRutina SET cantidad_reps = ? WHERE id_rutina = ?";
+            statement = con.prepareStatement(consultaSQL);
+
+            // Establecer los parámetros de la consulta con los nuevos valores de la rutina
+            statement.setInt(1, repe);
+            statement.setInt(2, id);
+          
+            // Ejecutar la consulta
+            statement.executeUpdate();
+        } finally {
+            // Cerrar recursos
+            cerrarRecursos(con, statement, null);
+        }
+    }
+            
+    public void eliminarRutina(int idRutina) throws SQLException {
+        Connection con = null;
+        PreparedStatement statement = null;
+
+        try {
+            Conexion conexionDB = new Conexion();
+            con = conexionDB.obtenerConexion();
+
+            // Consulta SQL para eliminar una rutina por ID
+            String consultaSQL = "DELETE FROM DetalleRutina WHERE id_rutina = ?";
+            statement = con.prepareStatement(consultaSQL);
+            statement.setInt(1, idRutina);
+
+            // Ejecutar la consulta
+            statement.executeUpdate();
+        } finally {
+            // Cerrar recursos
+            cerrarRecursos(con, statement, null);
+        }
+    }
 
     // Otros métodos existentes...
-
     // Método para cerrar recursos (Connection, Statement, ResultSet)
     private void cerrarRecursos(Connection con, PreparedStatement statement, ResultSet resultSet) {
         try {

@@ -1,135 +1,71 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="Models.Usuario"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Tu Sitio Web</title>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Gym</title>
+         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.18.0/font/bootstrap-icons.css" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+        <link href="Estilos/style.min.css" rel="stylesheet">
+        <!-- Flaticon Font -->
+        <link href="lib/flaticon/font/flaticon.css" rel="stylesheet">
+    </head>
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" integrity="sha384-rbs5IB3ZHD3oiI1SINDbBjVw4WofQ1yzS1z9tpwYlRQikqFFsfZt3yQxhqF5SquZ" crossorigin="anonymous">
+    <body>
+        <div class="container-fluid p-0 nav-bar">
+            <nav class="navbar navbar-expand-lg bg-none navbar-dark py-3">
+                <a href="" class="navbar-brand">
+                    <h1 class="m-0 display-4 font-weight-bold text-uppercase text-white">GymRats</h1>
+                </a>
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
+                    <div class="navbar-nav ml-auto p-4 bg-secondary">
+                        <a href="index.jsp" class="nav-item nav-link active">Home</a>
 
-    <!-- Estilos personalizados -->
-    <style>
-        body {
-            background-color: #f8f9fa;
-        }
+                        <c:choose>
+                            <c:when test="${empty sessionScope.usuario}">
+                                <a class="nav-link" aria-current="page" href="LoginController" id="login-link2"><i class="bi bi-person-check"></i> Iniciar Sesión</a>
+                                <a class="nav-link" href="UsuarioController" id="login-link"><i class="bi bi-person-add"></i> Registro</a>
+                            </c:when>
+                            <c:otherwise>
+                                <c:choose>
+                                    <c:when test="${sessionScope.usuario.roll eq 1}">
+                                        <!-- Rol 0 (Cliente) -->
+                                        <!--                                    <a class="nav-link" aria-current="page" href="categorias">Ejercicios</a>-->
+                                        <a class="nav-link" aria-current="page" href="RutinaController">Mi Rutina</a>
+                                        <a class="nav-link" aria-current="page" href="DatosController" id="datos">Datos Cuerpo</a>
+                                        <a class="nav-link" aria-current="page" href="VerCategoria">Aprender GYM</a>
+                                        <a class="btn btn-outline-danger nav-item nav-link" href="LogoutController" id="login-link3" style="color: white;">
+                                                <i class="bi bi-box-arrow-right"></i> <!-- Icono de cerrar sesión -->
+                                                Cerrar Sesión
+                                            </a>
+                                    </c:when>
+                                    <c:when test="${sessionScope.usuario.roll eq 0}">
+                                        <!-- Rol 1 (Administrador) --> 
+                                        <a class="nav-link" aria-current="page" href="MostrarFormCategoria">Agregar Categorías</a>
+                                        <a class="nav-link" aria-current="page" href="MostrarFormEjercicio">Agregar Ejercicios</a>
+                                        <a class="nav-link" aria-current="page" href="CrudEjercicios">Ver Ejercicios</a>
+                                        <a class="nav-link" aria-current="page" href="CrudCategorias">Ver Categorias</a>
 
-        .navbar {
-            background-color: #343a40;
-        }
+                                       <form class="d-flex" role="search">
+                                            <a class="btn btn-outline-danger nav-item nav-link" href="LogoutController" id="login-link3" style="color: white;">
+                                                <i class="bi bi-box-arrow-right"></i> <!-- Icono de cerrar sesión -->
+                                                Cerrar Sesión
+                                            </a>
+                                        </form>
 
-        .navbar-brand {
-            color: #ffffff;
-            font-size: 1.5rem;
-            font-weight: bold;
-        }
-
-        .navbar-nav .nav-link {
-            color: #ffffff;
-            margin-right: 15px;
-            font-weight: bold;
-        }
-
-        .navbar-nav .nav-link:hover {
-            color: #ffc107;
-        }
-/*
-        .container {
-            margin-top: 50px;
-        }*/
-
-        h1 {
-            color: #007bff;
-        }
-
-        p {
-            font-size: 1.1rem;
-        }
-    </style>
-</head>
-<body>
-
-<nav class="navbar navbar-expand-lg navbar-dark">
-    <div class="container">
-        <a class="navbar-brand" href="#">Tu Marca</a>
-
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="UsuarioController" id="login-link">Registro</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="LoginController"id="login-link2">Login</a>
-                </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="MostrarFormCategoria" id="datos" style="display: block;"> Crear Categoria</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="MostrarFormEjercicio" id="newejercicios" style="display: block;">Crear ejer Diego</a>
-                </li>
-                
-                <li class="nav-item">
-                    <a class="nav-link" href="DatosController" id="datos" style="display: none;"> mi cuerpo</a>
-                </li>
-
-                
-              
-            </ul>
+                                    </c:when>
+                                </c:choose>
+                            </c:otherwise>
+                        </c:choose>
+                    </div>
+                </div>
+            </nav>
         </div>
-    </div>
-</nav>
 
-
-    
-
-
-
-<!-- JS -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.7.28/sweetalert2.all.js" integrity="sha512-cD1xrn0N1tV0ze8axCp+noWgxMFlWVg22HBXUfowicWhJsnAcSXNKnwI77Bkn3yLyqGvwZ/a8M2PtOjVp5vMaw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.1/js/bootstrap.min.js" integrity="sha512-fHY2UiQlipUq0dEabSM4s+phmn+bcxSYzXP4vAXItBvBHU7zAM/mkhCZjtBEIJexhOMzZbgFlPLuErlJF2b+0g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script>
- 
-        var loginLink = document.getElementById("login-link");
-         var loginLink2 = document.getElementById("login-link2");
-        var logoutLink = document.getElementById("logout-link");
-
-        
-        if (<%= session.getAttribute("usuario") == null %>) {
-
-            logoutLink.style.display = "none";
-        } else {
-           
-            loginLink.style.display = "none";
-             loginLink2.style.display = "none";
-        }
-    </script>
-     <script>
-
-        // Obtener el valor de idRol del usuario de la sesi?n
-        var idRol = ${sessionScope.usuario.roll} ;
-        console.log(idRol);
-
-        // Obtener los elementos de men? que deben mostrarse solo para ciertos roles
-        var ejer = document.getElementById("newejercicios");
-        var datos = document.getElementById("datos");
-//        var proveedoresLink = document.getElementById("proveedores-link");
-//        
-//        var historialLink = document.getElementById("historial-link");
-//        var carritoLink = document.getElementById("carrito-link");
-        datos.style.display = "block";
-
-        // Comprobar si el usuario est? autenticado
-        if (idRol === 1) {
-            // Si el idRol es igual a 1 (el rol que tiene acceso a todo), mostrar elementos de men? espec?ficos
-            newejercicios.style.display = "block";
-//            categoriasLink.style.display = "block";
-//            proveedoresLink.style.display = "block";
-//            historialLink.style.display = "none";
-//            carritoLink.style.display = "none";
-        } else {
-            // Si el idRol no es igual a 1, estos elementos ya est?n ocultos por defecto, no es necesario hacer nada aqu?
-        }
-        
-
-    </script>
-</body>
+    </body>
 </html>

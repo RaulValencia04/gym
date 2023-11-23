@@ -59,7 +59,7 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response)
                 UsuarioDAO usuarioDAO;
                 usuarioDAO = new UsuarioDAO();
                 usuarioDAO.agregarUsuario(nuevoUsuario);
-                response.sendRedirect(request.getContextPath() + "/UsuarioController");
+                response.sendRedirect(request.getContextPath() + "/LoginController");
             }
         }
     }

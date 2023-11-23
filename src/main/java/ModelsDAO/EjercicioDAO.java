@@ -106,7 +106,7 @@ public class EjercicioDAO {
         return ejercicios;
     }
 
-    public List<Ejercicio> obtenerEjerciciosPorCategoria(int idCategoriaSeleccionada) throws SQLException {
+    public static List<Ejercicio> obtenerEjerciciosPorCategoria(int idCategoriaSeleccionada) throws SQLException {
          Connection con = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
@@ -158,5 +158,6 @@ public class EjercicioDAO {
         
     }
 
-
+    
+    
 }

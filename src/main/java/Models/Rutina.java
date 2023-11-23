@@ -12,6 +12,41 @@ public class Rutina {
        private int idRutina;
     private String nombre;
     private String dia;
+    private String nombreEjercicio;
+    private int  repeticiones;
+
+    public Rutina(String nombre, String dia,  String nombreEjercicio, int repeticiones) {
+        this.nombre = nombre;
+        this.dia = dia;
+        this.nombreEjercicio = nombreEjercicio;
+        this.repeticiones = repeticiones;
+        
+    }
+
+    public Rutina(int idRutina, String nombre, String dia, String nombreEjercicio, int repeticiones, int idUsuario) {
+        this.idRutina = idRutina;
+        this.nombre = nombre;
+        this.dia = dia;
+        this.nombreEjercicio = nombreEjercicio;
+        this.repeticiones = repeticiones;
+        this.idUsuario = idUsuario;
+    }
+
+    public String getNombreEjercicio() {
+        return nombreEjercicio;
+    }
+
+    public void setNombreEjercicio(String nombreEjercicio) {
+        this.nombreEjercicio = nombreEjercicio;
+    }
+
+    public int getRepeticiones() {
+        return repeticiones;
+    }
+
+    public void setRepeticiones(int repeticiones) {
+        this.repeticiones = repeticiones;
+    }
   
     private int idUsuario;
 
