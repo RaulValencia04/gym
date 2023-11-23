@@ -32,7 +32,7 @@
 
       <div class="form-group">
         <label for="descripcion">Descripción:</label>
-        <textarea class="form-control" id="descripcion" name="descripcion" rows="3" value="${listaEjercicios.getDescripcion()}" required></textarea>
+        <textarea class="form-control" id="descripcion" name="descripcion" rows="3" value="${listaEjercicios.getDescripcion()}" required>${listaEjercicios.getDescripcion()}</textarea>
       </div>
 
       <div class="form-group">
