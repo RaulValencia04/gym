@@ -30,7 +30,7 @@ import ModelsDAO.EjercicioDAO;
  *
  * @author Esau
  */
-@WebServlet(name = "EjerciciosController", urlPatterns = {"/MostrarFormCategoria", "/GuardarCategoria", "/MostrarFormEjercicio", "/GuardarEjercicio", "/VerEjercicio", "/VerCategoria", "/CrudCategorias", "/CrudEjercicios", "/EditarCategoria", "/EliminarCategoria", "/GuardarCategoriaEditada"})
+@WebServlet(name = "EjerciciosController", urlPatterns = {"/MostrarFormCategoria", "/GuardarCategoria", "/MostrarFormEjercicio", "/GuardarEjercicio", "/VerEjercicio", "/VerCategoria", "/CrudCategorias", "/CrudEjercicios", "/EditarCategoria", "/EliminarCategoria", "/GuardarCategoriaEditada","/EditarEjercicio"})
 public class EjerciciosController extends HttpServlet {
 
     private EjercicioDAO ejercicioDAO;
@@ -71,6 +71,9 @@ public class EjerciciosController extends HttpServlet {
 
             case "/EliminarCategoria":
                 EliminarCategoria(request, response);
+                break;
+            case "/EditarEjercicio":
+                EditarEjercicio(request, response);
                 break;
 
             default:
@@ -280,11 +283,11 @@ public class EjerciciosController extends HttpServlet {
             throws ServletException, IOException {
         HttpSession session = request.getSession(false);
 
-        List<Categoria> listaCategorias = CategoriaDAO.consultaGeneral();
+        List<Ejercicio> listaEjercicios = EjercicioDAO.consultaGeneralEjercicio();
 
-        if (listaCategorias != null) {
+        if (listaEjercicios != null) {
             // Pasar los datos del producto a la vista de edición
-            request.setAttribute("listaCategorias", listaCategorias);
+            request.setAttribute("listaEjercicios", listaEjercicios);
             RequestDispatcher dispatcher = request.getRequestDispatcher("Ejercicios/CrudEjercicios.jsp");
             dispatcher.forward(request, response);
         }
@@ -350,6 +353,26 @@ public class EjerciciosController extends HttpServlet {
             // Pasar los datos del producto a la vista de edición
             request.setAttribute("listaCategorias", listaCategorias);
             RequestDispatcher dispatcher = request.getRequestDispatcher("Ejercicios/CrudCategorias.jsp");
+            dispatcher.forward(request, response);
+        }
+
+    }
+     
+     
+      private void EditarEjercicio(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        HttpSession session = request.getSession(false);
+
+        String idEjerciciotr = request.getParameter("id");
+
+        int idEjercicio = Integer.parseInt(idEjerciciotr);
+
+        Ejercicio listaEjercicios = EjercicioDAO.consultaPorId(idEjercicio);
+        
+        if (listaEjercicios != null) {
+            // Pasar los datos del producto a la vista de edición
+            request.setAttribute("listaEjercicios", listaEjercicios);
+            RequestDispatcher dispatcher = request.getRequestDispatcher("./Ejercicios/EditarEjercicio.jsp");
             dispatcher.forward(request, response);
         }
 
