@@ -194,50 +194,53 @@ public class RutinaController extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        try {
-            // Recopilar datos del formulario
-            String nombreRutina = request.getParameter("nombre");
-            String dia = request.getParameter("Dia");
-            String[] ejercicios = request.getParameterValues("ejercicios");
-            String[] repeticiones = request.getParameterValues("repeticiones");
+@Override
+protected void doPost(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
+    try {
+        // Recopilar datos del formulario
+        String nombreRutina = request.getParameter("nombre");
+        String dia = request.getParameter("Dia");
+        String[] ejercicios = request.getParameterValues("ejercicios");
+        String[] repeticiones = request.getParameterValues("repeticiones");
 
-            HttpSession session = request.getSession();
-            String correo = (String) session.getAttribute("correo");
+        HttpSession session = request.getSession();
+        String correo = (String) session.getAttribute("correo");
 
-            // Obtener el ID de usuario desde la base de datos usando el correo electrónico
-            int idUsuario = obtenerIdUsuarioPorCorreo(correo);
+        // Obtener el ID de usuario desde la base de datos usando el correo electrónico
+        int idUsuario = obtenerIdUsuarioPorCorreo(correo);
 
-            // Crear objeto Rutina
-            Rutina rutina = new Rutina(nombreRutina, dia, idUsuario); // Asegúrate de tener el idUsuario disponible
+        // Crear objeto Rutina
+        Rutina rutina = new Rutina(nombreRutina, dia, idUsuario);
 
-            // Guardar la rutina en la base de datos
-            RutinaDAO rutinaDAO = new RutinaDAO();
-            rutinaDAO.insertarRutina(rutina);
+        // Guardar la rutina en la base de datos
+        RutinaDAO rutinaDAO = new RutinaDAO();
+        rutinaDAO.insertarRutina(rutina);
 
-            // Obtener el ID de la rutina recién insertada
-            int idRutina = rutinaDAO.obtenerIdRutina(); // Puedes agregar este método a RutinaDAO
+        // Obtener el ID de la rutina recién insertada
+        int idRutina = rutinaDAO.obtenerIdRutina();
 
-            // Guardar detalles de la rutina
-            DetalleRutinaDAO detalleRutinaDAO = new DetalleRutinaDAO();
-            for (int i = 0; i < ejercicios.length; i++) {
-                int idEjercicio = Integer.parseInt(ejercicios[i]);
-                int cantidadReps = Integer.parseInt(repeticiones[i]);
+        // Guardar detalles de la rutina
+        DetalleRutinaDAO detalleRutinaDAO = new DetalleRutinaDAO();
+        for (int i = 0; i < ejercicios.length; i++) {
+            String[] ids = ejercicios[i].split("-");
+            int idCategoria = Integer.parseInt(ids[0]);
+            int idEjercicio = Integer.parseInt(ids[1]);
+            int cantidadReps = Integer.parseInt(repeticiones[i]);
 
-                DetalleRutina detalleRutina = new DetalleRutina(idEjercicio, idRutina, cantidadReps);
-                detalleRutinaDAO.insertarDetalleRutina(detalleRutina);
-            }
-
-            // Redirigir a alguna página de éxito
-            response.sendRedirect("/gym/RutinaController");
-        } catch (SQLException ex) {
-            // Manejar errores
-            ex.printStackTrace();
-            response.sendRedirect("error.jsp");
+            DetalleRutina detalleRutina = new DetalleRutina(idEjercicio, idRutina, cantidadReps);
+            detalleRutinaDAO.insertarDetalleRutina(detalleRutina);
         }
+
+        // Redirigir a alguna página de éxito
+        response.sendRedirect("/gym/RutinaController");
+    } catch (SQLException ex) {
+        // Manejar errores
+        ex.printStackTrace();
+        response.sendRedirect("error.jsp");
     }
+}
+
 
     private int obtenerIdUsuarioPorCorreo(String correo) throws SQLException {
         int idUsuario = -1;

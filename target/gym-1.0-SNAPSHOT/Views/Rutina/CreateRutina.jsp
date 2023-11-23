@@ -153,6 +153,7 @@
                                         <label for="categoria-select" class="col-form-label">Categoría</label>
                                         <select class="form-select" id="categoria-select" name="categoria">
                                             <c:forEach var="categoria" items="${listacategoria}">
+
                                                 <option value="${categoria.idCategoria}"
                                                         ${categoria.idCategoria eq selectedCategoryId ? 'selected' : ''}>
                                                     ${categoria.descripcion}
@@ -173,7 +174,7 @@
                                             }
 
                                             // Mostrar solo los ejercicios que tienen el mismo valor que la categoría seleccionada
-                                            var selectedEjercicios = document.querySelectorAll('#ejercicio-select option[value="' + selectedCategoria + '"]');
+                                            var selectedEjercicios = document.querySelectorAll('#ejercicio-select option[data-id-categoria="' + selectedCategoria + '"]');
                                             for (var j = 0; j < selectedEjercicios.length; j++) {
                                                 selectedEjercicios[j].style.display = '';
                                             }
@@ -181,14 +182,20 @@
                                     </script>
 
 
+
                                     <div class="mb-3" id="ejercicioDropdown">
                                         <label for="ejercicio-select" class="col-form-label">Ejercicio:</label>
                                         <select class="form-select" id="ejercicio-select" name="ejercicios">
                                             <c:forEach var="ejercicio" items="${listaejercicios}">
-                                                <option value="${ejercicio.idCategoria}">${ejercicio.nombre}</option>
+                                                <option value="${ejercicio.idCategoria}-${ejercicio.idEjercicio}" 
+                                                        data-id-categoria="${ejercicio.idCategoria}" 
+                                                        data-id-ejercicio="${ejercicio.idEjercicio}">
+                                                    ${ejercicio.nombre}
+                                                </option>
                                             </c:forEach>
                                         </select>
                                     </div>
+
 
                                     <div class="mb-3">
                                         <label for="repeticiones" class="col-form-label">Cantidad de repeticiones:</label>
