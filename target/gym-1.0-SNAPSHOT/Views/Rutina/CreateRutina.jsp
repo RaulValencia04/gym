@@ -8,7 +8,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        
+
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Rutina</title>
@@ -275,12 +275,21 @@
 
 
 
-            <!-- Botón para guardar la rutina -->
-            <div class="row mt-3">
-                <div class="col-md-12 text-center">
-                    <button type="button" class="btn btn-success btn-lg">Guardar Rutina en Reporte</button>
+
+            <form action="LoadReportController" method="get">
+                <div class="row mt-3">
+                    <div class="col-md-12 text-center">
+                        <button type="submit" class="btn btn-success btn-lg">Reporte General</button>
+                    </div>
                 </div>
-            </div>
+            </form>
+            <form action="ReportController" method="get">
+                <div class="row mt-3">
+                    <div class="col-md-12 text-center">
+                        <button type="submit" class="btn btn-success btn-lg">Reporte por Categoria</button>
+                    </div>
+                </div>
+            </form>
 
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
