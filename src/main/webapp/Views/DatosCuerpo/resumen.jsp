@@ -72,7 +72,7 @@
 
    
      <div style="width: 80%; padding-top: 160px;" class="mx-auto">
-        <canvas id="imcGraphic" style="background-color: antiquewhite; opacity: 0.9;"></canvas>
+        <canvas id="imcGraphic" style="background-color: antiquewhite; "></canvas>
     </div>
 
 </body>
