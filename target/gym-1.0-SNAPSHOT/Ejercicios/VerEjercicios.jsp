@@ -121,7 +121,7 @@
                 transform: scale(1.05); /* Escalar la tarjeta al pasar el mouse */
             }
         </style>        
-        <div class="container-fluid fondo-con-imagen" style="background-image: url('img/fondo1.jpg'); padding-bottom: 50px">
+        <div class="container-fluid fondo-con-imagen" style="background-image: url('img/fondo1.jpg'); padding-bottom: 150px">
             <h1 class="" style="padding-top: 150px; background-color: rgba(0, 0, 0, 0.3); color: #f5f5f5; font-size: 50px; text-align: center;">Mejores Ejercicios</h1>
 
 
